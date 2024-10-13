@@ -7,38 +7,44 @@ import {
   Input,
   Textarea,
   Checkbox,
-  Carousel
+  Carousel,
 } from "@material-tailwind/react";
 import { FingerPrintIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { PageTitle, Footer } from "@/widgets/layout";
 import { FeatureCard } from "@/widgets/cards";
-import { featuresData, teamData, contactData } from "@/data";
+import { featuresData, contactData } from "@/data";
 
 export function Home() {
+  const CAROUSEL_IMAGES = [
+    "pic_1.jpg",
+    "pic_2.jpg",
+    "pic_3.jpg",
+    "pic_4.jpg",
+    "pic_5.jpg",
+  ];
   return (
     <>
       <div className="relative flex h-screen content-center items-center justify-center pb-32 pt-16">
         {/* <div className="absolute top-0 h-full w-full bg-[url('/img/background-3.jpg')] bg-cover bg-center" /> */}
         <div className="absolute top-0 h-full w-full">
-          <Carousel className="rounded-xl">
-            <img
-              src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2560&q=80"
-              alt="image 1"
-              className="h-full w-full object-cover"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2940&q=80"
-              alt="image 2"
-              className="h-full w-full object-cover"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2762&q=80"
-              alt="image 3"
-              className="h-full w-full object-cover"
-            />
+          <Carousel
+            className="rounded-xl"
+            navigation={() => <></>}
+            prevArrow={() => <></>}
+            nextArrow={() => <></>}
+            autoplay
+            loop
+          >
+            {CAROUSEL_IMAGES.map((picName) => (
+              <img
+                src={`/img/homepage_carousel/${picName}`}
+                alt="image 1"
+                className="h-full w-full object-cover"
+              />
+            ))}
           </Carousel>
         </div>
-        <div className="absolute top-0 h-full w-full bg-black/60 bg-cover bg-center dark:bg-slate-900/60" />
+        <div className="absolute top-0 h-full w-full bg-black/40 bg-cover bg-center dark:bg-slate-900/40" />
         <div className="max-w-8xl container relative mx-auto">
           <div className="flex flex-wrap items-center">
             <div className="ml-auto mr-auto w-full px-4 text-center lg:w-8/12">
@@ -47,23 +53,15 @@ export function Home() {
                 color="white"
                 className="mb-6 font-black"
               >
-                Empowering a Greener Tomorrow, One Step at a Time.
+                The Future of Seamless Market Fair Management
               </Typography>
               <Typography variant="lead" color="white" className="opacity-80">
-                Your Essential Companion for Building a Greener Future.
-                Empowering individuals to make eco-friendly choices, reduce
-                their carbon footprint, and create a sustainable environment for
-                generations to come.
+                At BazaarHub, we believe in making market fairs effortless for
+                organizers, vendors, and customers alike. Whether you’re
+                organizing a large-scale event or running a local pop-up, our
+                platform is designed to simplify the process every step of the
+                way.
               </Typography>
-              <Button
-                variant="gradient"
-                size="lg"
-                className="mt-8 h-28 rounded-full px-12 text-2xl dark:text-slate-900"
-                color="green"
-                onClick={() => window.open("/sign-in", "_self")}
-              >
-                Start Greenify today
-              </Button>
             </div>
           </div>
         </div>
@@ -77,7 +75,7 @@ export function Home() {
                 color={color}
                 title={title}
                 icon={React.createElement(icon, {
-                  className: "w-5 h-5 text-white",
+                  className: "w-5 h-5 text-white dark:text-slate-800",
                 })}
                 description={description}
               />
@@ -85,28 +83,27 @@ export function Home() {
           </div>
           <div className="mt-32 flex flex-wrap items-center">
             <div className="mx-auto -mt-8 w-full px-4 md:w-5/12">
-              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-full bg-blue-gray-900 p-2 text-center shadow-lg dark:bg-white">
-                <FingerPrintIcon className="h-8 w-8 text-white dark:text-slate-900" />
-              </div>
               <Typography
                 variant="h3"
                 className="mb-3 font-bold dark:text-white"
                 color="blue-gray"
               >
-                Our Vision:
+                Why Choose BazaarHub?
               </Typography>
               <Typography className="mb-8 font-normal text-blue-gray-500 dark:text-slate-400">
-                At Greenify, we envision a future where sustainable living is
-                second nature. We strive to foster a community where every
-                individual can make a tangible impact, leading to a greener,
-                cleaner planet. Through education, action, and rewarding
-                positive behaviors, we aim to make environmental responsibility
-                accessible to everyone.
+                BazaarHub simplifies every aspect of market fair management into
+                one efficient platform. Organizers can easily manage
+                registrations, allocate booths, and monitor event performance in
+                real time, all while enhancing visibility for vendors and
+                customers alike. Vendors can quickly register, pay, and set up
+                their stalls without any hassle. Customers benefit from easy
+                event discovery, browsing vendor offerings, and planning their
+                visits with ease.
                 <br />
                 <br />
-                Join Greenify today and start turning your actions into
-                meaningful rewards. Together, we can create a sustainable future
-                for generations to come!
+                Join BazaarHub today for a seamless, streamlined experience that
+                makes managing or attending market fairs smarter and more
+                efficient for everyone involved.
               </Typography>
               <Button
                 className="dark:bg-white dark:text-slate-900"
@@ -115,10 +112,10 @@ export function Home() {
                 read more
               </Button>
             </div>
-            <div className="mx-auto mt-24 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
+            <div className="mx-auto mt-16 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
               <div className="hidden h-full w-full lg:block">
                 <img
-                  src="/img/team-work.jpeg"
+                  src="/img/why_choose_us.jpg"
                   className="h-full w-full rounded-3xl object-cover"
                 />
               </div>
@@ -128,48 +125,28 @@ export function Home() {
       </section>
       <section className="relative bg-white px-4 py-24 dark:bg-slate-900">
         <div className="container mx-auto">
-          <Card className="rounded-lg shadow-2xl shadow-gray-500/10">
-            <CardBody className="px-8 text-center dark:bg-slate-800">
-              <PageTitle section="Co-Working" heading="Together we can">
-                <Typography
-                  variant="h5"
-                  className="font-normal dark:text-slate-400"
-                >
-                  We collaborate with a network of eco-conscious businesses,
-                  recycling centers, and environmental organizations to offer a
-                  wide variety of reward vouchers and opportunities. By working
-                  together, we aim to build a strong community dedicated to
-                  preserving our planet.
-                </Typography>
-              </PageTitle>
-              <div className="mx-auto mb-48 mt-20 grid max-w-5xl grid-cols-1 gap-16 dark:bg-slate-800 md:grid-cols-2 lg:grid-cols-3">
-                {contactData.map(({ title, icon, description }) => (
-                  <Card
-                    key={title}
-                    color="transparent"
-                    shadow={false}
-                    className="text-center text-blue-gray-900"
-                  >
-                    <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-full bg-blue-gray-900 shadow-lg shadow-gray-500/20 dark:bg-white">
-                      {React.createElement(icon, {
-                        className: "w-5 h-5 text-white dark:text-slate-800",
-                      })}
-                    </div>
-                    <Typography
-                      variant="h5"
-                      color="blue-gray"
-                      className="mb-2 dark:text-white"
-                    >
-                      {title}
-                    </Typography>
-                    <Typography className="font-normal text-blue-gray-500 dark:text-slate-400">
-                      {description}
-                    </Typography>
-                  </Card>
-                ))}
-              </div>
-            </CardBody>
-          </Card>
+          <PageTitle heading="How to become a vendor">
+            <Typography
+              variant="normal"
+              className="font-normal dark:text-slate-400"
+            >
+              To apply as a vendor, start by completing the online application,
+              where you'll need to provide photos of your products and booth
+              design. Previous exhibitors in good standing generally have the
+              first opportunity to reapply. New applicants are chosen based on
+              space availability, the uniqueness of their offerings, and the
+              visual appeal of their displays.
+            </Typography>
+          </PageTitle>
+          <div className="flex flex-row flex-wrap gap-3 mt-5 justify-center">
+            <Button color="amber">Upcoming fairs</Button>
+            <Button color="amber">
+              More information
+            </Button>
+            <Button className="dark:bg-white dark:text-slate-800">FAQ</Button>
+          </div>
+
+          <hr className="mt-24 dark:border-slate-600" />
           <div className="mt-24 ">
             <PageTitle section="Contact Us" heading="Want to work with us?">
               Complete this form and we will get back to you in 24 hours.
@@ -217,7 +194,6 @@ export function Home() {
                 variant="gradient"
                 size="lg"
                 className="mt-8"
-                color="green"
                 fullWidth
               >
                 Send Message

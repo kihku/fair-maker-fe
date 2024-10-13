@@ -5,6 +5,7 @@ import {
   Typography,
   IconButton,
 } from "@material-tailwind/react";
+import React from "react";
 
 export function FeatureCard({ color, icon, title, description }) {
   return (
@@ -12,10 +13,10 @@ export function FeatureCard({ color, icon, title, description }) {
       <CardBody className="px-8 text-center">
         {icon && (
           <IconButton
-            variant="gradient"
+            // variant="gradient"
             size="lg"
             color={color}
-            className="pointer-events-none mb-6 rounded-full"
+            className="pointer-events-none mb-6 rounded-full dark:bg-white dark:text-white"
           >
             {icon}
           </IconButton>

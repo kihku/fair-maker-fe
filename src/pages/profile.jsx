@@ -10,11 +10,9 @@ import {
 import {
   MapPinIcon,
   BriefcaseIcon,
-  BuildingLibraryIcon,
 } from "@heroicons/react/24/solid";
 import { Footer } from "@/widgets/layout";
 import { chartConfig } from "@/data";
-import Chart from "react-apexcharts";
 import Spline from "@splinetool/react-spline";
 
 import { useLocalStorageState, useRequest } from "ahooks";
@@ -186,9 +184,6 @@ export function Profile() {
                   </Typography>
                 </div>
               </CardHeader>
-              <CardBody className="dark:border-slate-400 px-2 pb-0">
-                <Chart {...chartConfig} />
-              </CardBody>
             </Card>
 
             <Card className="dark:bg-slate-800 h-1/3 overflow-y-auto flex-1">

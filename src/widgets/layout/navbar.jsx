@@ -17,34 +17,15 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useLocalStorageState } from "ahooks";
 
-import { send_request } from "@/util";
-
 export function Navbar({ brandName, routes, action }) {
   const [openNav, setOpenNav] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = (isOpen) => setOpen(isOpen);
 
-  const [file, setFile] = React.useState([]);
-  const inputFile = React.useRef(null);
-
   const [,setUserProfile] = useLocalStorageState('userData');
   const [token,] = useLocalStorageState('token');
 
-  async function getBadge() {
-    if (token) {
-      let data = await send_request("POST", `/add_point`, { 'Authorization': `Bearer ${token}` });
-
-      if (data) {
-        setUserProfile(data);
-      }
-    }
-  }
-
-
-  const handleChange = (e) => {
-    setFile([...file, e.target.files[0]]);
-  };
 
   React.useEffect(() => {
     window.addEventListener(
@@ -131,45 +112,6 @@ export function Navbar({ brandName, routes, action }) {
           )}
         </IconButton>
       </div>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        size="xs"
-        className="dark:bg-slate-800"
-      >
-        <DialogHeader className="dark:text-white">
-          Upload your "Green Proof" here
-        </DialogHeader>
-        <DialogBody className="flex justify-center">
-          <input
-            type="file"
-            ref={inputFile}
-            onChange={handleChange}
-            id="upload-photo"
-          />
-        </DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={() => handleOpen(false)}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button
-            className=" dark:text-slate-900"
-            variant="gradient"
-            color="green"
-            onClick={() => {
-              handleOpen(false);
-              getBadge();
-            }}
-          >
-            <span>Submit</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
       <MobileNav
         className="rounded-xl bg-white px-4 pb-4 pt-2 text-blue-gray-900"
         open={openNav}
@@ -190,8 +132,8 @@ Navbar.defaultProps = {
   brandName: "Bazaar Hub",
   action: (
     <a>
-      <Button color="green" variant="gradient" size="sm" fullWidth>
-        Get green badge
+      <Button color="amber" size="sm" fullWidth>
+        Upcoming fairs
       </Button>
     </a>
   ),
