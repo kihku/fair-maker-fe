@@ -23,9 +23,8 @@ export function Navbar({ brandName, routes, action }) {
 
   const handleOpen = (isOpen) => setOpen(isOpen);
 
-  const [,setUserProfile] = useLocalStorageState('userData');
-  const [token,] = useLocalStorageState('token');
-
+  const [, setUserProfile] = useLocalStorageState("userData");
+  const [token] = useLocalStorageState("token");
 
   React.useEffect(() => {
     window.addEventListener(
@@ -132,7 +131,12 @@ Navbar.defaultProps = {
   brandName: "Bazaar Hub",
   action: (
     <a>
-      <Button color="amber" size="sm" fullWidth>
+      <Button
+        color="amber"
+        size="sm"
+        fullWidth
+        onClick={() => window.open("/fair-list")}
+      >
         Upcoming fairs
       </Button>
     </a>

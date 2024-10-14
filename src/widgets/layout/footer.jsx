@@ -4,7 +4,7 @@ import React from "react";
 
 const year = new Date().getFullYear();
 
-export function Footer({ title, description, socials, menus, copyright }) {
+export function Footer({ title, description, socials, menus }) {
   return (
     <footer>
       <div className="relative bg-slate-800 px-4 pb-6 pt-8 dark:bg-slate-800">
@@ -120,7 +120,6 @@ Footer.propTypes = {
   description: PropTypes.string,
   socials: PropTypes.arrayOf(PropTypes.object),
   menus: PropTypes.arrayOf(PropTypes.object),
-  // copyright: PropTypes.node,
 };
 
 Footer.displayName = "/src/widgets/layout/footer.jsx";

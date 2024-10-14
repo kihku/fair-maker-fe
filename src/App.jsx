@@ -2,18 +2,17 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/widgets/layout";
 import routes from "@/routes";
 import { useLocalStorageState } from "ahooks";
-import { useEffect } from "react";
+import React from "react";
+import { FairList } from "./pages";
 
 function App() {
   const { pathname } = useLocation();
 
-  const [token,] = useLocalStorageState("token");
+  const [token] = useLocalStorageState("token");
 
   const local_routes = token
     ? routes.filter((route) => !["/sign-in", "/sign-up"].includes(route.path))
     : routes;
-
-  console.log(local_routes);
   return (
     <>
       {!(pathname == "/sign-in" || pathname == "/sign-up") && (
@@ -24,8 +23,9 @@ function App() {
       <Routes>
         {local_routes.map(
           ({ path, element }, key) =>
-            element && <Route key={key} exact path={path} element={element} />,
+            element && <Route key={key} path={path} element={element} />,
         )}
+        <Route path="/fair-list" key="fairlist" element={<FairList />} />
         <Route path="*" element={<Navigate to="/home" replace />} />
       </Routes>
     </>

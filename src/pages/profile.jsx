@@ -7,10 +7,7 @@ import {
   CardHeader,
   CardFooter,
 } from "@material-tailwind/react";
-import {
-  MapPinIcon,
-  BriefcaseIcon,
-} from "@heroicons/react/24/solid";
+import { MapPinIcon, BriefcaseIcon } from "@heroicons/react/24/solid";
 import { Footer } from "@/widgets/layout";
 import { chartConfig } from "@/data";
 import Spline from "@splinetool/react-spline";
@@ -31,7 +28,9 @@ const rank_to_text = {
 
 export function Profile() {
   const [token] = useLocalStorageState("token");
-  const [userProfile] = useLocalStorageState("userData", {listenStorageChange: true,});
+  const [userProfile] = useLocalStorageState("userData", {
+    listenStorageChange: true,
+  });
   const [avatar] = useLocalStorageState("avatar");
 
   if (!token) {
@@ -56,10 +55,10 @@ export function Profile() {
     <>
       <section className="relative block h-[50vh]">
         <div className="bg-profile-background absolute top-0 h-full w-full scale-100 bg-[url('/img/background-3.jpg')] bg-cover bg-center" />
-        <div className="dark:bg-slate-900/60 absolute top-0 h-full w-full bg-black/60 bg-cover bg-center" />
+        <div className="absolute top-0 h-full w-full bg-black/60 bg-cover bg-center dark:bg-slate-900/60" />
       </section>
-      <section className="dark:bg-slate-900 relative bg-white py-16">
-        <div className="dark:bg-slate-900 relative -mt-40 mb-6 flex w-full min-w-0 flex-col break-words bg-white px-4">
+      <section className="relative bg-white py-16 dark:bg-slate-900">
+        <div className="relative -mt-40 mb-6 flex w-full min-w-0 flex-col break-words bg-white px-4 dark:bg-slate-900">
           <div className="container mx-auto">
             <div className="flex flex-col justify-between lg:flex-row">
               <div className="relative flex items-start gap-6">
@@ -95,13 +94,13 @@ export function Profile() {
                     <Typography
                       variant="lead"
                       color="blue-gray"
-                      className="dark:text-white font-bold uppercase"
+                      className="font-bold uppercase dark:text-white"
                     >
                       {userProfile.points}
                     </Typography>
                     <Typography
                       variant="small"
-                      className="dark:text-slate-400 font-semibold text-blue-gray-500"
+                      className="font-semibold text-blue-gray-500 dark:text-slate-400"
                     >
                       Green Badges
                     </Typography>
@@ -110,13 +109,13 @@ export function Profile() {
                     <Typography
                       variant="lead"
                       color="blue-gray"
-                      className="dark:text-white font-bold uppercase"
+                      className="font-bold uppercase dark:text-white"
                     >
                       {userProfile.total_points}
                     </Typography>
                     <Typography
                       variant="small"
-                      className="dark:text-slate-400 font-semibold text-blue-gray-500"
+                      className="font-semibold text-blue-gray-500 dark:text-slate-400"
                     >
                       Life-time Badges
                     </Typography>
@@ -137,7 +136,7 @@ export function Profile() {
                   {rank_to_text[userProfile.rank]}
                 </Typography>
               </div>
-              <Typography className="dark:text-slate-400 font-medium text-blue-gray-500 lg:absolute lg:mr-96">
+              <Typography className="font-medium text-blue-gray-500 dark:text-slate-400 lg:absolute lg:mr-96">
                 Nature has always been my safe haven. Whether it’s the calming
                 sound of the waves crashing on the shore or the crisp, fresh air
                 of a mountain hike, being outdoors makes me feel alive and
@@ -155,13 +154,13 @@ export function Profile() {
             </div>
           </div>
           {/* ------TREE HERE */}
-          <div className="mt-10 lg:mt-14 h-full">
+          <div className="mt-10 h-full lg:mt-14">
             <Spline scene="https://prod.spline.design/1vZlowhn6xIzlpor/scene.splinecode" />
           </div>
           {/* ------TREE HERE */}
 
-          <div className="lg:mx-48 mx-2 flex flex-col gap-8 px-4 lg:-mt-5 lg:flex-row ">
-            <Card className="dark:bg-slate-800 flex-1">
+          <div className="mx-2 flex flex-col gap-8 px-4 lg:mx-48 lg:-mt-5 lg:flex-row ">
+            <Card className="flex-1 dark:bg-slate-800">
               <CardHeader
                 floated={false}
                 shadow={false}
@@ -186,13 +185,13 @@ export function Profile() {
               </CardHeader>
             </Card>
 
-            <Card className="dark:bg-slate-800 h-1/3 overflow-y-auto flex-1">
+            <Card className="h-1/3 flex-1 overflow-y-auto dark:bg-slate-800">
               <CardHeader
                 floated={false}
                 shadow={false}
                 className="rounded-none"
               >
-                <div className="dark:bg-slate-800 flex items-center justify-between gap-8">
+                <div className="flex items-center justify-between gap-8 dark:bg-slate-800">
                   <div>
                     <Typography
                       variant="h5"
@@ -217,12 +216,12 @@ export function Profile() {
                       {TABLE_HEAD.map((head) => (
                         <th
                           key={head}
-                          className="dark:bg-slate-800 border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                          className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 dark:bg-slate-800"
                         >
                           <Typography
                             variant="small"
                             color="blue-gray"
-                            className="dark:text-slate-400 font-bold leading-none opacity-70"
+                            className="font-bold leading-none opacity-70 dark:text-slate-400"
                           >
                             {head}
                           </Typography>
@@ -282,7 +281,7 @@ export function Profile() {
                   </tbody>
                 </table>
               </CardBody>
-              <CardFooter className="dark:border-slate-400 flex items-center justify-between border-t border-blue-gray-50 p-4">
+              <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4 dark:border-slate-400">
                 <Typography
                   variant="small"
                   color="blue-gray"
@@ -294,14 +293,14 @@ export function Profile() {
                   <Button
                     variant="outlined"
                     size="sm"
-                    className="dark:text-slate-800 dark:bg-white"
+                    className="dark:bg-white dark:text-slate-800"
                   >
                     Previous
                   </Button>
                   <Button
                     variant="outlined"
                     size="sm"
-                    className="dark:text-slate-800 dark:bg-white"
+                    className="dark:bg-white dark:text-slate-800"
                   >
                     Next
                   </Button>
@@ -312,7 +311,7 @@ export function Profile() {
         </div>
       </section>
       <div className="bg-white">
-        <Footer copyright={undefined} />
+        <Footer />
       </div>
     </>
   );

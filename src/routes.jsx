@@ -1,4 +1,5 @@
-import { Home, Profile, SignIn, SignUp, Store } from "@/pages";
+import { FairList, Home, Profile, SignIn, SignUp, Store } from "@/pages";
+import React from "react";
 
 export const routes = [
   {
@@ -24,12 +25,12 @@ export const routes = [
   {
     name: "Store",
     path: "/store",
-    element: <Store/>,
+    element: <Store />,
   },
   {
     name: "About",
     path: "/home",
-    element: <Home/>,
+    element: <Home />,
   },
 ];
 
