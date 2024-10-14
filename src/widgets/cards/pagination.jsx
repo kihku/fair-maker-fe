@@ -2,14 +2,17 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { Button, IconButton } from "@material-tailwind/react";
 import React from "react";
 
-export function Pagination() {
+export function Pagination({ onChange, total, pageSize }) {
   const [active, setActive] = React.useState(1);
 
   const getItemProps = (index) => ({
     variant: active === index ? "filled" : "text",
     color: "gray",
     className: "dark:bg-white dark:text-black",
-    onClick: () => setActive(index),
+    onClick: () => {
+      setActive(index);
+      onChange(index);
+    },
   });
 
   const next = () => {
