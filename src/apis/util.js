@@ -1,4 +1,6 @@
-export async function send_request(method, url, headers, body){
+export async function send_request({method = "GET", url="", headers={}, params={}, body={}} = {}){
+    const searchParams = new URLSearchParams({...params}).toString();
+    url = url + (searchParams ? "?" : "") + searchParams;
     const result = await fetch(
         "https://greenify.host"+url,
         {

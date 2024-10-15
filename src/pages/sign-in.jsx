@@ -6,7 +6,7 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import { send_request } from "@/util";
+import { send_request } from "@/apis/util";
 import { useLocalStorageState } from 'ahooks';
 import React from "react";
 

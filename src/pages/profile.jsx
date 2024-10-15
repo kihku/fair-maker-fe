@@ -13,7 +13,7 @@ import { chartConfig } from "@/data";
 import Spline from "@splinetool/react-spline";
 
 import { useLocalStorageState, useRequest } from "ahooks";
-import { send_request } from "@/util";
+import { send_request } from "@/apis/util";
 import React from "react";
 
 const TABLE_HEAD = ["User", "Rank", "Stars Earned"];

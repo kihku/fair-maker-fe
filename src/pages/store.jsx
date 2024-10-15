@@ -15,7 +15,7 @@ import {
 } from "@material-tailwind/react";
 import { Footer, Voucher } from "@/widgets/layout";
 import { useRequest, useLocalStorageState } from "ahooks";
-import { send_request } from "@/util";
+import { send_request } from "@/apis/util";
 
 const TABLE_HEAD = ["Product Name", "Category", "Quantity", "Price"];
 
