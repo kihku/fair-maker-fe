@@ -3,6 +3,7 @@ export const FAIR_LIST = [
     picture: "/images/farmers-market.jpg",
     title: "Farmers Market Fest",
     location: "Vietnam, District 1",
+    organizer: "Apple",
     description:
       "A community event showcasing local farmers, fresh produce, and homemade goods.",
     tags: [
@@ -17,6 +18,7 @@ export const FAIR_LIST = [
     picture: "/images/artisan-market.jpg",
     title: "Artisan Craft Fair",
     location: "Vietnam, District 1",
+    organizer: "Apple",
     description:
       "Discover unique handmade crafts, jewelry, and art from local artisans.",
     tags: [

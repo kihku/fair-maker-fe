@@ -17,7 +17,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useLocalStorageState } from "ahooks";
 
-export function Navbar({ brandName, routes, action }) {
+export function Navbar({ brandName, routes, action, onDarkModeChange }) {
   const [openNav, setOpenNav] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -87,6 +87,7 @@ export function Navbar({ brandName, routes, action }) {
             size="sm"
             onClick={() => {
               document.documentElement.classList.toggle("dark");
+              onDarkModeChange();
             }}
             className="hidden lg:inline-block"
           >

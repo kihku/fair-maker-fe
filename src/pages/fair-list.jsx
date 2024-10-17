@@ -1,7 +1,7 @@
 import { getListFair } from "@/apis";
 import { FAIR_LIST } from "@/data";
-import { FairCard } from "@/widgets/cards/fair-card";
-import { Pagination } from "@/widgets/cards/pagination";
+import { FairCard } from "@/widgets/components/fair-card";
+import { Pagination } from "@/widgets/components/pagination";
 import { Footer } from "@/widgets/layout";
 import { Select, Typography, Option, Spinner } from "@material-tailwind/react";
 import { useRequest, useUpdateEffect } from "ahooks";

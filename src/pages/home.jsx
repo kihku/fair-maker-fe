@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import { FingerPrintIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { PageTitle, Footer } from "@/widgets/layout";
-import { FeatureCard } from "@/widgets/cards";
+import { FeatureCard } from "@/widgets/components";
 import { featuresData, contactData } from "@/data";
 
 export function Home() {
@@ -138,11 +138,9 @@ export function Home() {
               visual appeal of their displays.
             </Typography>
           </PageTitle>
-          <div className="flex flex-row flex-wrap gap-3 mt-5 justify-center">
+          <div className="mt-5 flex flex-row flex-wrap justify-center gap-3">
             <Button color="amber">Upcoming fairs</Button>
-            <Button color="amber">
-              More information
-            </Button>
+            <Button color="amber">More information</Button>
             <Button className="dark:bg-white dark:text-slate-800">FAQ</Button>
           </div>
 
