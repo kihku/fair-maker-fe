@@ -82,7 +82,11 @@ export function FairCard({
         </div>
       </CardBody>
       <CardFooter className="pt-3">
-        <Button size="lg" fullWidth={true}>
+        <Button
+          size="lg"
+          fullWidth={true}
+          onClick={() => window.open("/fair-detail")}
+        >
           More info
         </Button>
       </CardFooter>
@@ -92,7 +96,7 @@ export function FairCard({
 
 FairCard.defaultProps = {
   color: "black",
-  location: "To be announced"
+  location: "To be announced",
 };
 
 FairCard.propTypes = {
