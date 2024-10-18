@@ -1,22 +1,47 @@
-import { registerUser } from "@/apis";
+import { citiesOfCountries, registerUser, userMetaData } from "@/apis";
 import { validateMessages } from "@/widgets/utils";
-import { useRequest } from "ahooks";
+import { useRequest, useSessionStorageState, useLocalStorageState } from "ahooks";
 import { Button, DatePicker, Form, Input, Select, Typography } from "antd";
 import React, { useState } from "react";
 
 const { Title } = Typography;
 
 export function RegisterForm() {
+  const [userData, setUserData] = useSessionStorageState("userData");
+  const [userToken, setUserToken] = useSessionStorageState("googleToken");
+  const [cities, setCities] = useState([]);
+  const [authToken, setAuthToken] = useLocalStorageState("token");
+  
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    runRegisterUser(values);
+    runRegisterUser({...values, google_token: userToken, age: 25});
   };
 
   const { run: runRegisterUser } = useRequest(registerUser, {
     manual: true,
-    onSuccess: () => {},
+    onSuccess: (result, params) => {
+      setUserData(result.data);
+      setUserToken("");
+      setAuthToken(result.token);
+      window.open("/profile", "_self");
+    },
   });
+
+  const {run: runFetchCities} = useRequest(citiesOfCountries, {
+    manual: true,
+    onSuccess: (result, params) => {
+      setCities(result.cities);
+    }
+  })
+
+  const {data: formMetaData} = useRequest(userMetaData);
+
+  if (userData){
+    window.open("/profile", "_self");
+  } else if (!userToken){
+    window.open("/sign-in", "_self");
+  }
 
   return (
     <>
@@ -74,7 +99,7 @@ export function RegisterForm() {
                         required: true,
                       },
                     ]}
-                    name="firstName"
+                    name="first_name"
                   >
                     <Input placeholder="Andy" />
                   </Form.Item>
@@ -87,7 +112,7 @@ export function RegisterForm() {
                       },
                     ]}
                     required
-                    name="lastName"
+                    name="last_name"
                   >
                     <Input placeholder="Williams" />
                   </Form.Item>
@@ -105,22 +130,13 @@ export function RegisterForm() {
                   <Select
                     allowClear
                     placeholder="Please select"
-                    options={[
-                      {
-                        value: "male",
-                        label: "Male",
-                      },
-                      {
-                        value: "female",
-                        label: "Female",
-                      },
-                    ]}
+                    options={formMetaData?.gender}
                   ></Select>
                 </Form.Item>
                 <Form.Item
                   label="Date of birth"
                   required
-                  name="dob"
+                  name="birth_date"
                   rules={[
                     {
                       required: true,
@@ -143,8 +159,9 @@ export function RegisterForm() {
                   className="w-full"
                 >
                   <Select
-                    placeholder="Latvia"
-                    options={[{ value: "FIN", label: "Finland" }]}
+                    placeholder="Finland"
+                    onSelect={(value) => {runFetchCities(value)}}
+                    options={formMetaData?.countries}
                   />
                 </Form.Item>
                 <Form.Item
@@ -160,7 +177,7 @@ export function RegisterForm() {
                 >
                   <Select
                     placeholder="Liepāja"
-                    options={[{ value: "LAH", label: "Lahti" }]}
+                    options={cities}
                   />
                 </Form.Item>
               </div>

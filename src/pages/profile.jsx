@@ -1,17 +1,14 @@
 import { Footer } from "@/widgets/layout";
 
-import { useLocalStorageState, useRequest } from "ahooks";
+import { useRequest, useSessionStorageState } from "ahooks";
 import React from "react";
-import { Avatar, Tabs, Typography } from "antd";
+import { Avatar, Button, Tabs, Typography } from "antd";
 import { PersonalInfo } from "@/widgets/components/personal-info";
 import { VendorInfo } from "@/widgets/components/vendor-info";
+import { getUserInfo } from "@/apis";
 
 export function Profile() {
-  const [token] = useLocalStorageState("token");
-  const [userProfile] = useLocalStorageState("userData", {
-    listenStorageChange: true,
-  });
-  const [avatar] = useLocalStorageState("avatar");
+  const [userData, setUserData] = useSessionStorageState("userData");
   const TAB_ITEMS = [
     {
       key: "PERSONAL_INFO",
@@ -33,6 +30,16 @@ export function Profile() {
     },
   ];
 
+  const {run: runGetUserInfo} = useRequest(getUserInfo, {
+    manual: true,
+    onSuccess: (result, params) => {
+      console.log("success")
+    },
+    onError: (result, params) => {
+      console.log("failed");
+    },
+  })
+
   return (
     <>
       <section className="relative block h-[50vh]">
@@ -46,9 +53,8 @@ export function Profile() {
               <div className="relative flex w-full basis-1/3 flex-col items-center gap-6 border border-gray-200 bg-white p-5 dark:border-stone-700 dark:bg-stone-900">
                 <div className="h-40 w-40">
                   <Avatar
-                    // src={avatar}
+                    src={userData?.avatar}
                     size="large"
-                    src="https://picsum.photos/200/300"
                     alt="Profile picture"
                     className="h-full w-full"
                   />
@@ -59,15 +65,13 @@ export function Profile() {
                     className="dark:text-white"
                     level={2}
                   >
-                    {/* {userProfile?.full_name} */}
-                    Dung Pham Tran Hien
+                    {userData?.first_name} {userData?.last_name}
                   </Typography.Title>
                   <Typography
                     color="gray"
                     className="!mt-0 font-normal dark:text-stone-300"
                   >
-                    {/* {userProfile?.email} */}
-                    Email@gmail.com
+                    {userData?.email}
                   </Typography>
                   <hr className="my-3 w-full dark:border-stone-700" />
                   tags
@@ -79,6 +83,11 @@ export function Profile() {
                   <Typography className="dark:text-white">
                     In progress Application
                   </Typography>
+                  <Button
+                  onClick={runGetUserInfo}
+                  >
+                    Test
+                  </Button>
                 </div>
               </div>
 

@@ -1,20 +1,33 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/widgets/layout";
 import routes from "@/routes";
-import { useLocalStorageState } from "ahooks";
-import React, { useState } from "react";
+import { useLocalStorageState, useSessionStorageState, useRequest  } from "ahooks";
+import React, { useState, useEffect } from "react";
 import { FairList } from "./pages";
 import { ConfigProvider, theme } from "antd";
 import { VendorCreate } from "./pages/vendor-create";
+import { getUserInfo } from "@/apis";
 
 function App() {
   const { defaultAlgorithm, darkAlgorithm } = theme;
   const [isDarkMode, setIsDarkMode] = useState(true);
   const { pathname } = useLocation();
 
-  const [token] = useLocalStorageState("token");
+  const [userData, setUserData] = useSessionStorageState("userData");
+  const [authToken, _] = useLocalStorageState("token");
 
-  const local_routes = token
+  useRequest(getUserInfo, {
+    ready: (!userData && authToken),
+    onSuccess: (result, params) => {
+      setUserData(result);
+    },
+    onError: (result, params) => {
+      console.log("failed");
+    },
+    defaultParams: [authToken]
+  });
+
+  const local_routes = userData
     ? routes.filter((route) => !["/sign-in", "/sign-up"].includes(route.path))
     : routes;
   return (
