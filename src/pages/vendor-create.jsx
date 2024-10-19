@@ -1,6 +1,6 @@
-import { registerUser } from "@/apis";
+import { createOrg, getOrgMetadata } from "@/apis";
 import { validateMessages } from "@/widgets/utils";
-import { useRequest } from "ahooks";
+import { useRequest, useSessionStorageState, useLocalStorageState } from "ahooks";
 import {
   Button,
   Checkbox,
@@ -11,21 +11,33 @@ import {
   Select,
   Typography,
 } from "antd";
-import React from "react";
+import React, {useState} from "react";
 import { Footer } from "react-day-picker";
 
 const { Title } = Typography;
 
 export function VendorCreate() {
   const [form] = Form.useForm();
+  const [orgData, setOrgData] = useSessionStorageState("orgData");
+  const [authToken, _] = useLocalStorageState("token");
+  const [orgMetadata, setOrgMetadata] = useState({company_size: []});
 
   const onFinish = (values) => {
-    runRegisterUser(values);
+    runCreateOrg(values, authToken);
+    window.open("/profile", "_self");
   };
 
-  const { run: runRegisterUser } = useRequest(registerUser, {
+  const { run: runCreateOrg } = useRequest(createOrg, {
     manual: true,
-    onSuccess: () => {},
+    onSuccess: (result, params) => {
+      setOrgData(result);
+    },
+  });
+
+  useRequest(getOrgMetadata, {
+    onSuccess: (result, params) => {
+      setOrgMetadata(result);
+    },
   });
 
   return (
@@ -68,7 +80,7 @@ export function VendorCreate() {
                     required: true,
                   },
                 ]}
-                name="organizationName"
+                name="organization_name"
               >
                 <Input placeholder="Johnny Computer" />
               </Form.Item>
@@ -80,7 +92,7 @@ export function VendorCreate() {
                     required: true,
                   },
                 ]}
-                name="contactAddress"
+                name="contact_address"
               >
                 <Input placeholder="Aleksander 1B23 " />
               </Form.Item>
@@ -92,7 +104,7 @@ export function VendorCreate() {
                     required: true,
                   },
                 ]}
-                name="contactPhone"
+                name="contact_phone"
               >
                 <Input placeholder="(+38) 000000000 " />
               </Form.Item>
@@ -129,10 +141,7 @@ export function VendorCreate() {
                 >
                   <Select
                     placeholder="Medium"
-                    options={[
-                      { value: "Large", label: "Large" },
-                      { value: "Medium", label: "Medium" },
-                    ]}
+                    options={orgMetadata?.company_size}
                   />
                 </Form.Item>
                 <Form.Item
@@ -144,7 +153,7 @@ export function VendorCreate() {
                     },
                   ]}
                   required
-                  name="operationYear"
+                  name="years_of_operation"
                 >
                   <InputNumber
                     className="w-full"
