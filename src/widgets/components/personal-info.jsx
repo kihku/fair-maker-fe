@@ -1,9 +1,15 @@
 import { Button, DatePicker, Form, Input, Select } from "antd";
 import React from "react";
 import { validateMessages } from "../utils";
+import { useSessionStorageState } from "ahooks";
+import dayjs from 'dayjs';
 
 export function PersonalInfo() {
   const [form] = Form.useForm();
+  const [userData, _] = useSessionStorageState("userData");
+
+
+
   return (
     <Form
       className="dark:bg-stone-900"
@@ -26,6 +32,7 @@ export function PersonalInfo() {
         <Input
           type="email"
           placeholder="name@mail.com"
+          defaultValue={userData?.email}
         />
       </Form.Item>
       <div>
@@ -40,7 +47,7 @@ export function PersonalInfo() {
             ]}
             name="firstName"
           >
-            <Input placeholder="Andy" />
+            <Input placeholder="Andy" defaultValue={userData?.first_name}/>
           </Form.Item>
           <Form.Item
             className="w-full"
@@ -52,7 +59,7 @@ export function PersonalInfo() {
             ]}
             name="lastName"
           >
-            <Input placeholder="Williams" />
+            <Input placeholder="Williams" defaultValue={userData?.last_name}/>
           </Form.Item>
         </div>
         <Form.Item
@@ -69,14 +76,15 @@ export function PersonalInfo() {
             placeholder="Please select"
             options={[
               {
-                value: "male",
+                value: "MALE",
                 label: "Male",
               },
               {
-                value: "female",
+                value: "FEMALE",
                 label: "Female",
               },
             ]}
+            defaultValue={userData?.gender}
           ></Select>
         </Form.Item>
         <Form.Item
@@ -87,6 +95,7 @@ export function PersonalInfo() {
               required: true,
             },
           ]}
+          initialValue={dayjs(userData?.birth_date)}
         >
           <DatePicker className="w-full" format={"DD/MM/YYYY"} />
         </Form.Item>
@@ -105,6 +114,7 @@ export function PersonalInfo() {
           <Select
             placeholder="Latvia"
             options={[{ value: "FIN", label: "Finland" }]}
+            defaultValue={userData?.country}
           />
         </Form.Item>
         <Form.Item
@@ -120,6 +130,7 @@ export function PersonalInfo() {
           <Select
             placeholder="Liepāja"
             options={[{ value: "LAH", label: "Lahti" }]}
+            defaultValue={userData?.city}
           />
         </Form.Item>
       </div>

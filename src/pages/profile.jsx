@@ -30,16 +30,6 @@ export function Profile() {
     },
   ];
 
-  const {run: runGetUserInfo} = useRequest(getUserInfo, {
-    manual: true,
-    onSuccess: (result, params) => {
-      console.log("success")
-    },
-    onError: (result, params) => {
-      console.log("failed");
-    },
-  })
-
   return (
     <>
       <section className="relative block h-[50vh]">
@@ -83,11 +73,6 @@ export function Profile() {
                   <Typography className="dark:text-white">
                     In progress Application
                   </Typography>
-                  <Button
-                  onClick={runGetUserInfo}
-                  >
-                    Test
-                  </Button>
                 </div>
               </div>
 
