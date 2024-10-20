@@ -1,6 +1,7 @@
-import { FairList, Home, Profile, SignIn, SignUp, Store } from "@/pages";
+import { FairList, Home, Profile, SignIn, SignUp } from "@/pages";
 import React from "react";
 import { RegisterForm } from "./pages/register-form";
+import { FairManagement } from "./pages/fair-management";
 
 export const routes = [
   {
@@ -32,6 +33,11 @@ export const routes = [
     name: "Register form",
     path: "/register",
     element: <RegisterForm />,
+  },
+  {
+    name: "Fair Management",
+    path: "/fair-management",
+    element: <FairManagement />,
   },
 ];
 

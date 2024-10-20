@@ -1,13 +1,16 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Navbar } from "@/widgets/layout";
 import routes from "@/routes";
-import { useLocalStorageState, useSessionStorageState, useRequest  } from "ahooks";
-import React, { useState, useEffect } from "react";
-import { FairList } from "./pages";
+import {
+  useLocalStorageState,
+  useSessionStorageState,
+  useRequest,
+} from "ahooks";
+import React, { useState } from "react";
+import { FairCreate, FairDetail, FairList } from "./pages";
 import { ConfigProvider, theme } from "antd";
-import { VendorCreate } from "./pages/vendor-create";
 import { getUserInfo } from "@/apis";
-import { FairDetail } from "./pages/fair-detail";
+import { VendorCreate } from "./pages/vendor-create";
 
 function App() {
   const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -18,14 +21,14 @@ function App() {
   const [authToken, _] = useLocalStorageState("token");
 
   useRequest(getUserInfo, {
-    ready: (!userData && authToken),
+    ready: !userData && authToken,
     onSuccess: (result, params) => {
       setUserData(result);
     },
     onError: (result, params) => {
       console.log("failed");
     },
-    defaultParams: [authToken]
+    defaultParams: [authToken],
   });
 
   const local_routes = userData
@@ -59,8 +62,13 @@ function App() {
           />
           <Route
             path="/fair-detail"
-            key="Fair Detail"
+            key="fairDetail"
             element={<FairDetail />}
+          />
+          <Route
+            path="/fair-create"
+            key="fairCreate"
+            element={<FairCreate />}
           />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
