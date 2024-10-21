@@ -20,17 +20,17 @@ export function VendorCreate() {
   const [form] = Form.useForm();
   const [orgData, setOrgData] = useSessionStorageState("orgData");
   const [authToken, _] = useLocalStorageState("token");
-  const [orgMetadata, setOrgMetadata] = useState({company_size: []});
+  const [orgMetadata, setOrgMetadata] = useState({company_size: [], tags: []});
 
   const onFinish = (values) => {
     runCreateOrg(values, authToken);
-    window.open("/profile", "_self");
   };
 
   const { run: runCreateOrg } = useRequest(createOrg, {
     manual: true,
     onSuccess: (result, params) => {
       setOrgData(result);
+      window.open("/profile", "_self");
     },
   });
 
@@ -122,9 +122,11 @@ export function VendorCreate() {
               </Form.Item>
               <Form.Item label="Type of Business" name="tags">
                 <Select
+                  showSearch
+                  optionFilterProp="label"
                   mode="multiple"
                   placeholder="Please choose your product categories"
-                  options={[{ label: "apple", value: "apple" }]}
+                  options={orgMetadata?.tags}
                 />
               </Form.Item>
               <div className="flex w-full items-center gap-4">
