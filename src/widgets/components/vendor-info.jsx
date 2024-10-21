@@ -3,19 +3,8 @@ import React, { useState } from "react";
 import { useSessionStorageState, useRequest, useLocalStorageState } from "ahooks";
 import { getUserOrg } from "@/apis";
 
-export function VendorInfo() {
+export function VendorInfo({orgData}) {
   const [modalOpen, setModalOpen] = useState(false);
-  const [orgData, setOrgData] = useSessionStorageState("orgData");
-
-  const [authToken, _] = useLocalStorageState("token");
-
-  const { run: runCreateOrg } = useRequest(getUserOrg, {
-    ready: authToken,
-    onSuccess: (result, params) => {
-      setOrgData(result);
-    },
-    defaultParams: [authToken]
-  });
 
   return (
     <>

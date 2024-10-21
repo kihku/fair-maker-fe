@@ -15,7 +15,7 @@ export function RegisterForm() {
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    runRegisterUser({...values, google_token: userToken, age: 25});
+    runRegisterUser({...values, google_token: userToken});
   };
 
   const { run: runRegisterUser } = useRequest(registerUser, {

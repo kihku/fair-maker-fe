@@ -1,14 +1,29 @@
 import { Footer } from "@/widgets/layout";
 
-import { useRequest, useSessionStorageState } from "ahooks";
+import { useRequest, useSessionStorageState, useLocalStorageState } from "ahooks";
 import React from "react";
 import { Avatar, Button, Tabs, Typography } from "antd";
 import { PersonalInfo } from "@/widgets/components/personal-info";
 import { VendorInfo } from "@/widgets/components/vendor-info";
-import { getUserInfo } from "@/apis";
+import { getUserOrg } from "@/apis";
 
 export function Profile() {
   const [userData, setUserData] = useSessionStorageState("userData");
+
+  const [orgData, setOrgData] = useSessionStorageState("orgData");
+
+  const [authToken, _] = useLocalStorageState("token");
+
+
+  useRequest(getUserOrg, {
+    ready: (authToken && !orgData),
+    onSuccess: (result, params) => {
+      setOrgData(result);
+    },
+    defaultParams: [authToken]
+  });
+
+
   const TAB_ITEMS = [
     {
       key: "PERSONAL_INFO",
@@ -24,7 +39,7 @@ export function Profile() {
       label: "Vendor",
       children: (
         <div className="h-[500px] bg-white dark:bg-stone-900">
-          <VendorInfo />
+          <VendorInfo orgData={orgData}/>
         </div>
       ),
     },
