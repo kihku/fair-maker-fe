@@ -386,7 +386,7 @@ export function FairConfig({ onFinish, metadata, authToken }) {
           )}
         </Form.List>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button className="w-full" type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

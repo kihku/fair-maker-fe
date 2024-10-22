@@ -2,7 +2,7 @@ import { getFairDetail } from "@/apis";
 import { Footer } from "@/widgets/layout";
 import { FacebookFilled, InstagramFilled } from "@ant-design/icons";
 import { useLocalStorageState, useRequest } from "ahooks";
-import { Button, Carousel, Typography } from "antd";
+import { Button, Carousel, Tag, Typography } from "antd";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -10,7 +10,6 @@ export function FairDetail() {
   let { eventId } = useParams();
 
   const [authToken, _] = useLocalStorageState("token");
-  const [fairDetail, setFairDetail] = useState();
 
   const datePrintOptions = {
     weekday: "long",
@@ -19,10 +18,9 @@ export function FairDetail() {
     day: "numeric",
   };
 
-  useRequest(getFairDetail, {
+  const { data: fairDetail } = useRequest(getFairDetail, {
     onSuccess: (result, params) => {
       console.log(result);
-      setFairDetail(result);
     },
     defaultParams: [eventId, authToken],
   });
@@ -156,9 +154,7 @@ export function FairDetail() {
           </Typography.Paragraph> */}
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">Tags</p>
           {fairDetail?.tags.map(({ value, label }) => (
-            <div className="w-fit rounded-xl bg-gray-200 px-5 py-1 text-center text-sm font-bold dark:bg-stone-700 dark:text-white">
-              {label}
-            </div>
+            <Tag color="geekblue">{label}</Tag>
           ))}
 
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">

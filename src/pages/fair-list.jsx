@@ -9,6 +9,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import {
   Button,
   Card,
+  Empty,
   Form,
   Modal,
   Pagination,
@@ -42,7 +43,7 @@ export function FairList() {
     {
       onSuccess: (result, params) => {
         console.log(result);
-        const {data, page} = result;
+        const { data, page } = result;
         setFairList(data);
         setPage(page);
       },
@@ -154,67 +155,64 @@ export function FairList() {
           </p>
           <div>
             <form className=" mt-5 flex flex-wrap gap-4">
-              <div className="min-w-[50px] lg:w-40">
-                <Select
-                  showSearch
-                  optionFilterProp="label"
-                  placeholder="Country"
-                  className="dark:text-white"
-                  options={orgMetadata?.countries}
-                  onSelect={(country) => {
-                    setFilterParams({ ...filterParams, country });
-                    runFetchCities(country);
-                  }}
-                ></Select>
-              </div>
-              <div className="min-w-[50px] lg:w-80">
-                <Select
-                  showSearch
-                  optionFilterProp="label"
-                  placeholder="City"
-                  className="dark:text-white"
-                  options={cities}
-                  onSelect={(city) =>
-                    setFilterParams({ ...filterParams, city })
-                  }
-                ></Select>
-              </div>
-              <div className="min-w-[50px] lg:w-80">
-                <Select
-                  showSearch
-                  optionFilterProp="label"
-                  placeholder="Categories"
-                  options={orgMetadata?.tags}
-                  className="dark:text-white"
-                  onSelect={(tags) =>
-                    setFilterParams({ ...filterParams, tags })
-                  }
-                ></Select>
-              </div>
+              <Select
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                placeholder="Country"
+                className="min-w-[200px] dark:text-white lg:w-40"
+                options={orgMetadata?.countries}
+                onChange={(country) => {
+                  setFilterParams({ ...filterParams, country });
+                  runFetchCities(country);
+                }}
+              />
+              <Select
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                placeholder="City"
+                className="min-w-[200px] dark:text-white lg:w-40"
+                options={cities}
+                onChange={(city) => setFilterParams({ ...filterParams, city })}
+              />
+              <Select
+                allowClear
+                showSearch
+                optionFilterProp="label"
+                placeholder="Categories"
+                options={orgMetadata?.tags}
+                className="min-w-[200px] dark:text-white lg:w-80"
+                onChange={(tags) => setFilterParams({ ...filterParams, tags })}
+              />
             </form>
           </div>
           <div className="my-10 flex flex-row flex-wrap gap-5">
-            {fairList?.map(
-              ({
-                event_name: title,
-                description,
-                pictures,
-                tags,
-                city,
-                country,
-                street_addr,
-                id,
-              }) => (
-                <FairCard
-                  color="black"
-                  title={title}
-                  description={description}
-                  pictureUrl={pictures.banner[0].url}
-                  tags={tags}
-                  location={`${street_addr}, ${city}, ${country}`}
-                  id={id}
-                />
-              ),
+            {fairList?.length > 0 ? (
+              fairList.map(
+                ({
+                  event_name: title,
+                  description,
+                  pictures,
+                  tags,
+                  city,
+                  country,
+                  street_addr,
+                  id,
+                }) => (
+                  <FairCard
+                    color="black"
+                    title={title}
+                    description={description}
+                    pictureUrl={pictures.banner[0].url}
+                    tags={tags}
+                    location={`${street_addr}, ${city}, ${country}`}
+                    id={id}
+                  />
+                ),
+              )
+            ) : (
+              <Empty className="w-full" />
             )}
           </div>
         </section>
