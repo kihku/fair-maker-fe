@@ -1,11 +1,25 @@
+import { myOrgEvent } from "@/apis";
 import { Footer } from "@/widgets/layout";
 import { EditOutlined, EllipsisOutlined } from "@ant-design/icons";
+import { useLocalStorageState, useRequest } from "ahooks";
 import { Button, Card, Form, Modal, Select, Space, Table, Tag } from "antd";
 import Meta from "antd/es/card/Meta";
 import Column from "antd/es/table/Column";
 import React, { useState } from "react";
 
 export function FairManagement() {
+
+  const [upcomingEvent, setUpcomingEvent] = useState();
+  const [authToken, _] = useLocalStorageState("token");
+
+  useRequest(myOrgEvent, {
+    onSuccess: (result, params) => {
+      console.log(result);
+      //setUpcomingEvent(upcomingEvent);
+    },
+    defaultParams: [authToken]
+  });
+
   const [modalOpen, setModalOpen] = useState(false);
   const columns = [
     {

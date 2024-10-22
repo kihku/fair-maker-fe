@@ -17,3 +17,25 @@ export async function getListFair(props) {
   });
   return data?.points;
 }
+
+
+export async function createFair(payload, token){
+  let data = await send_request({
+    method: "POST",
+    url: '/event/',
+    body: {
+      data: payload
+    },
+    token
+  });
+  return data?.data;
+}
+
+export async function myOrgEvent(token){
+  let data = await send_request({
+    method: "GET",
+    url: '/org/event/',
+    token
+  });
+  return data?.data;
+}

@@ -1,9 +1,10 @@
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 export async function send_request({method = "GET", url="", headers={}, params={}, body=undefined, token=undefined} = {}){
     const searchParams = new URLSearchParams({...params}).toString();
-    console.log("Token passed to send_request: " + token);
     url = url + (searchParams ? "?" : "") + searchParams;
     const result = await fetch(
-        "http://192.168.31.115:8001"+url,
+        serverUrl+url,
         {
             headers: {
                 "Content-Type": "application/json",
