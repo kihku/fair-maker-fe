@@ -17,7 +17,6 @@ import {
   Tag,
   Timeline,
 } from "antd";
-import { Typography, Option, Spinner } from "@material-tailwind/react";
 import { useLocalStorageState, useRequest, useUpdateEffect } from "ahooks";
 import React, { useEffect, useState } from "react";
 
@@ -37,12 +36,15 @@ export function FairList() {
       currentPage: 1,
     },
   });
+  const [pageInfo, setPage] = useState();
   const { run: runGetList, loading: loadingList } = useRequest(
     () => getListFair(filterParams, authToken),
     {
       onSuccess: (result, params) => {
         console.log(result);
-        setFairList(result);
+        const {data, page} = result;
+        setFairList(data);
+        setPage(page);
       },
     },
   );
@@ -79,9 +81,7 @@ export function FairList() {
         ]}
       >
         <div className="pt-5">
-          <p className="mb-4 text-base font-bold dark:text-white">
-            Timeline
-          </p>
+          <p className="mb-4 text-base font-bold dark:text-white">Timeline</p>
           <Timeline
             mode="left"
             items={[
@@ -193,42 +193,45 @@ export function FairList() {
               </div>
             </form>
           </div>
-          <div className="my-10 flex flex-row flex-wrap justify-center gap-5">
-            {loadingList ? (
-              <Spinner className="h-12 w-12 justify-self-center" />
-            ) : (
-              <>
-                {fairList?.map(
-                  ({ event_name: title, description, pictures, tags, city, country, street_addr, id }) => (
-                    <FairCard
-                      color="black"
-                      title={title}
-                      description={description}
-                      pictureUrl={pictures.banner[0].url}
-                      tags={tags}
-                      location={`${street_addr}, ${city}, ${country}`}
-                      id = {id}
-                    />
-                  ),
-                )}
-                <div className="flex justify-center">
-                  <Pagination
-                    onChange={(value) => {
-                      setFilterParams({
-                        ...filterParams,
-                        page: {
-                          currentPage: value,
-                        },
-                      });
-                    }}
-                    total={10}
-                    pageSize={6}
-                  />
-                </div>
-              </>
+          <div className="my-10 flex flex-row flex-wrap gap-5">
+            {fairList?.map(
+              ({
+                event_name: title,
+                description,
+                pictures,
+                tags,
+                city,
+                country,
+                street_addr,
+                id,
+              }) => (
+                <FairCard
+                  color="black"
+                  title={title}
+                  description={description}
+                  pictureUrl={pictures.banner[0].url}
+                  tags={tags}
+                  location={`${street_addr}, ${city}, ${country}`}
+                  id={id}
+                />
+              ),
             )}
           </div>
         </section>
+        <div className="flex justify-center">
+          <Pagination
+            onChange={(value) => {
+              setFilterParams({
+                ...filterParams,
+                page: {
+                  currentPage: value,
+                },
+              });
+            }}
+            total={pageInfo?.total}
+            pageSize={pageInfo?.pageSize}
+          />
+        </div>
       </div>
       <Footer />
     </>

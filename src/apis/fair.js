@@ -13,7 +13,7 @@ export async function getListFair(props, token) {
     },
     token
   });
-  return data?.data;
+  return data;
 }
 
 
