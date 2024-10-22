@@ -1,4 +1,5 @@
 import { getFairDetail } from "@/apis";
+import { VendorPicker } from "@/widgets/components";
 import { Footer } from "@/widgets/layout";
 import { FacebookFilled, InstagramFilled } from "@ant-design/icons";
 import { useLocalStorageState, useRequest } from "ahooks";
@@ -138,6 +139,10 @@ export function FairDetail() {
             accompanied by English versions from the 1914 translation by H.
             Rackham.
           </Typography.Paragraph>
+          <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
+            Vendor Map
+          </p>
+          <VendorPicker />
         </div>
         <div>
           <p className="mb-4 text-3xl font-bold dark:text-white">Event Map</p>
@@ -154,7 +159,7 @@ export function FairDetail() {
           </Typography.Paragraph> */}
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">Tags</p>
           {fairDetail?.tags.map(({ value, label }) => (
-            <Tag color="geekblue">{label}</Tag>
+            <Tag color="red">{label}</Tag>
           ))}
 
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
@@ -166,6 +171,7 @@ export function FairDetail() {
           </div>
         </div>
       </div>
+
       <div className="px-5 pb-20 lg:px-52">
         <p className="mb-4 text-3xl font-bold dark:text-white">
           Other resources

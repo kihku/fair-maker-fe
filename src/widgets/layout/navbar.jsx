@@ -7,17 +7,13 @@ import {
   Typography,
   Button,
   IconButton,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-  Input,
 } from "@material-tailwind/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useLocalStorageState } from "ahooks";
-import { Switch } from "antd";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
+import { Dropdown, Space } from "antd";
+import { NOTIFICATION_ITEMS } from "@/data";
 
 export function Navbar({
   brandName,
@@ -90,15 +86,25 @@ export function Navbar({
           </Typography>
         </Link>
         <div className="hidden lg:block">{navList}</div>
+
         <div className="hidden gap-2 lg:flex">
+          <Dropdown menu={{ items: NOTIFICATION_ITEMS }}>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <div className="mr-2 mt-[5px] flex h-[40px] w-[40px] cursor-pointer flex-wrap content-center justify-center">
+                  <i className="fa-solid fa-bell fa-base"></i>
+                </div>
+              </Space>
+            </a>
+          </Dropdown>
           <DarkModeSwitch
-            className="mr-5 mt-[10px]"
+            className="mr-5 mt-[12px]"
             sunColor="white"
             onChange={() => {
               document.documentElement.classList.toggle("dark");
               onDarkModeChange();
             }}
-            size={30}
+            size={25}
             checked={isDarkMode}
           />
           {React.cloneElement(action, {

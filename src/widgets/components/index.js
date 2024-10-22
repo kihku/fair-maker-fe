@@ -6,3 +6,4 @@ export * from "@/widgets/components/fair-config";
 export * from "@/widgets/components/payment-form";
 export * from "@/widgets/components/vendor-config";
 export * from "@/widgets/components/alert-util";
+export * from "@/widgets/components/vendor-picker";

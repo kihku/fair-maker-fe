@@ -22,7 +22,6 @@ export function Home() {
 
   const CAROUSEL_IMAGES = [
     "pic_1.jpg",
-    "pic_2.jpg",
     "pic_3.jpg",
     "pic_4.jpg",
     "pic_5.jpg",
