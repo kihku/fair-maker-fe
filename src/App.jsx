@@ -11,6 +11,7 @@ import { FairCreate, FairDetail, FairList, RegisterForm } from "./pages";
 import { ConfigProvider, theme } from "antd";
 import { getUserInfo } from "@/apis";
 import { VendorCreate } from "./pages/vendor-create";
+import { FairApply } from "./pages/apply-fair";
 
 function App() {
   const { defaultAlgorithm, darkAlgorithm } = theme;
@@ -56,6 +57,7 @@ function App() {
               element && <Route key={key} path={path} element={element} />,
           )}
           <Route path="/fair-list" key="fairList" element={<FairList />} />
+          <Route path="/register" key="register" element={<RegisterForm />} />
           <Route
             path="/vendor-create"
             key="vendorCreate"
@@ -70,6 +72,11 @@ function App() {
             path="/fair-create"
             key="fairCreate"
             element={<FairCreate />}
+          />
+          <Route
+            path="/fair-apply/:eventId"
+            key="fairApply"
+            element={<FairApply />}
           />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>

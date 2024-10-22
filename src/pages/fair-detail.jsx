@@ -1,5 +1,5 @@
-import { getFairDetail } from "@/apis";
 import { VendorPicker } from "@/widgets/components";
+import { getFairDetail, getOrganizationData } from "@/apis";
 import { Footer } from "@/widgets/layout";
 import { FacebookFilled, InstagramFilled } from "@ant-design/icons";
 import { useLocalStorageState, useRequest } from "ahooks";
@@ -26,15 +26,10 @@ export function FairDetail() {
     defaultParams: [eventId, authToken],
   });
 
-  console.log(eventId);
-
-  const CAROUSEL_IMAGES = [
-    "pic_1.jpg",
-    "pic_2.jpg",
-    "pic_3.jpg",
-    "pic_4.jpg",
-    "pic_5.jpg",
-  ];
+  const { data: organizerData } = useRequest(getOrganizationData, {
+    defaultParams: [eventId, authToken],
+    ready: eventId,
+  });
   return (
     <div className="bg-white dark:bg-stone-900">
       <div className="h-24 bg-black"></div>
@@ -87,13 +82,20 @@ export function FairDetail() {
             About the{" "}
             <a
               className="font-bold text-blue-700 dark:text-blue-400"
-              onClick={() => {}}
+              onClick={() => { }}
             >
               terms and conditions
             </a>{" "}
             of vendors
           </p>
-          <Button type="primary">Apply Now</Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              window.open(`/fair-apply/${eventId}`, "_self");
+            }}
+          >
+            Apply Now
+          </Button>
           <Typography>Or book your tickets with discounted prices</Typography>
           <Button type="primary" className="bg-amber-500">
             Buy Ticket
@@ -121,23 +123,18 @@ export function FairDetail() {
             Organizer Information
           </p>
           <Typography.Paragraph>
-            Contrary to popular belief, Lorem Ipsum is not simply random text.
-            It has roots in a piece of classical Latin literature from 45 BC,
-            making it over 2000 years old. Richard McClintock, a Latin professor
-            at Hampden-Sydney College in Virginia, looked up one of the more
-            obscure Latin words, consectetur, from a Lorem Ipsum passage, and
-            going through the cites of the word in classical literature,
-            discovered the undoubtable source. Lorem Ipsum comes from sections
-            1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-            of Good and Evil) by Cicero, written in 45 BC. This book is a
-            treatise on the theory of ethics, very popular during the
-            Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit
-            amet..", comes from a line in section 1.10.32. The standard chunk of
-            Lorem Ipsum used since the 1500s is reproduced below for those
-            interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
-            Malorum" by Cicero are also reproduced in their exact original form,
-            accompanied by English versions from the 1914 translation by H.
-            Rackham.
+            Organizer name: {organizerData?.organization_name} <br></br>
+            Organizer headquater:{" "}
+            {`${organizerData?.contact_address}, ${organizerData?.city_label}, ${organizerData?.country_label}`}
+            <br></br>
+            Organizer phone contact: {organizerData?.contact_phone}
+            <br></br>
+            Organizer email : {organizerData?.email}
+            <br></br>
+            Organizer years in operation: {
+              organizerData?.years_of_operation
+            }{" "}
+            years<br></br>
           </Typography.Paragraph>
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
             Vendor Map

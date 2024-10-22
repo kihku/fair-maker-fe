@@ -32,3 +32,13 @@ export async function getOrgMetadata(){
       });
       return data?.data;
 }
+
+
+export async function getOrganizationData(org_id, token){
+  let data = await send_request({
+    method: "GET",
+    url: `/org/${org_id}`,
+    token: token
+  });
+  return data?.data;
+}
