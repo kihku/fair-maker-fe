@@ -4,11 +4,8 @@ import { validateMessages } from "../utils";
 import { useSessionStorageState } from "ahooks";
 import dayjs from 'dayjs';
 
-export function PersonalInfo() {
+export function PersonalInfo({userData}) {
   const [form] = Form.useForm();
-  const [userData, _] = useSessionStorageState("userData");
-
-
 
   return (
     <Form
@@ -100,7 +97,7 @@ export function PersonalInfo() {
           <DatePicker className="w-full" format={"DD/MM/YYYY"} />
         </Form.Item>
       </div>
-      <div className="flex w-full items-center gap-4">
+      {/* <div className="flex w-full items-center gap-4">
         <Form.Item
           label="Country"
           rules={[
@@ -133,7 +130,7 @@ export function PersonalInfo() {
             defaultValue={userData?.city}
           />
         </Form.Item>
-      </div>
+      </div> */}
       {/* <div className="flex">
         <Button>Save</Button>
       </div> */}

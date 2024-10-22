@@ -35,6 +35,7 @@ export function VendorInfo({ orgData, cities, runFetchCities, orgMetadata }) {
             form={form}
             cities={cities}
             action="UPDATE"
+            orgData={orgData}
           />
         </div>
       )}

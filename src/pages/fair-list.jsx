@@ -1,4 +1,4 @@
-import { getListFair } from "@/apis";
+import { citiesOfCountries, getListFair, getOrgMetadata } from "@/apis";
 import { FAIR_LIST } from "@/data";
 import { PaymentForm } from "@/widgets/components";
 import { FairCard } from "@/widgets/components/fair-card";
@@ -6,7 +6,6 @@ import { Footer } from "@/widgets/layout";
 import { validateMessages } from "@/widgets/utils";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { useRequest, useUpdateEffect } from "ahooks";
 import {
   Button,
   Card,
@@ -18,6 +17,7 @@ import {
   Tag,
   Timeline,
 } from "antd";
+import { useLocalStorageState, useRequest, useUpdateEffect } from "ahooks";
 import React, { useEffect, useState } from "react";
 
 export function FairList() {
@@ -27,17 +27,46 @@ export function FairList() {
     setOpen(true);
   };
   const [form] = Form.useForm();
+  const [authToken, _] = useLocalStorageState("token");
   const [filterParams, setFilterParams] = useState({
-    location: undefined,
-    categories: [],
+    city: undefined,
+    country: undefined,
+    tags: undefined,
     page: {
       currentPage: 1,
     },
   });
-  const { run: runGetList, loading: loadingList } = useRequest(() =>
-    getListFair(filterParams),
+  const [pageInfo, setPage] = useState();
+  const { run: runGetList, loading: loadingList } = useRequest(
+    () => getListFair(filterParams, authToken),
+    {
+      onSuccess: (result, params) => {
+        console.log(result);
+        const {data, page} = result;
+        setFairList(data);
+        setPage(page);
+      },
+    },
   );
-  useUpdateEffect(runGetList, [filterParams]);
+  useUpdateEffect(runGetList, [filterParams, authToken]);
+  const [orgMetadata, setOrgMetadata] = useState({
+    company_size: [],
+    tags: [],
+    countries: [],
+  });
+  const [cities, setCities] = useState([]);
+  useRequest(getOrgMetadata, {
+    onSuccess: (result, params) => {
+      setOrgMetadata(result);
+    },
+  });
+  const { run: runFetchCities } = useRequest(citiesOfCountries, {
+    manual: true,
+    onSuccess: (result, params) => {
+      setCities(result.cities);
+    },
+  });
+  const [fairList, setFairList] = useState([]);
   return (
     <>
       <Modal
@@ -52,9 +81,7 @@ export function FairList() {
         ]}
       >
         <div className="pt-5">
-          <p className="mb-4 text-base font-bold dark:text-white">
-            Timeline
-          </p>
+          <p className="mb-4 text-base font-bold dark:text-white">Timeline</p>
           <Timeline
             mode="left"
             items={[
@@ -126,74 +153,83 @@ export function FairList() {
             Upcoming events
           </p>
           <div>
-            <Form
-              className=" mt-5 flex flex-wrap gap-x-5"
-              validateMessages={validateMessages}
-              form={form}
-              layout="vertical"
-              // onFinish={onFinish}
-            >
-              <Form.Item
-                label="Categories"
-                name="categories"
-                className="w-[40%] lg:w-60"
-              >
+            <form className=" mt-5 flex flex-wrap gap-4">
+              <div className="min-w-[50px] lg:w-40">
                 <Select
-                  mode="multiple"
-                  placeholder="Food"
+                  showSearch
+                  optionFilterProp="label"
+                  placeholder="Country"
                   className="dark:text-white"
-                />
-              </Form.Item>
-              <Form.Item
-                label="Country"
-                name="country"
-                className="w-[40%] lg:w-60"
-              >
-                <Select
-                  placeholder="Finland"
-                  className="dark:text-white"
+                  options={orgMetadata?.countries}
+                  onSelect={(country) => {
+                    setFilterParams({ ...filterParams, country });
+                    runFetchCities(country);
+                  }}
                 ></Select>
-              </Form.Item>
-              <Form.Item label="City" name="city" className="w-[40%] lg:w-60">
+              </div>
+              <div className="min-w-[50px] lg:w-80">
                 <Select
-                  placeholder="Helsinki"
+                  showSearch
+                  optionFilterProp="label"
+                  placeholder="City"
                   className="dark:text-white"
-                  onChange={(location) =>
-                    setFilterParams({ ...filterParams, location })
+                  options={cities}
+                  onSelect={(city) =>
+                    setFilterParams({ ...filterParams, city })
                   }
-                />
-              </Form.Item>
-            </Form>
+                ></Select>
+              </div>
+              <div className="min-w-[50px] lg:w-80">
+                <Select
+                  showSearch
+                  optionFilterProp="label"
+                  placeholder="Categories"
+                  options={orgMetadata?.tags}
+                  className="dark:text-white"
+                  onSelect={(tags) =>
+                    setFilterParams({ ...filterParams, tags })
+                  }
+                ></Select>
+              </div>
+            </form>
           </div>
-          <div className="my-10 flex flex-row flex-wrap justify-center gap-5">
-            <>
-              {FAIR_LIST?.map(
-                ({ title, description, picture, tags, location }) => (
-                  <FairCard
-                    color="black"
-                    title={title}
-                    description={description}
-                    pictureUrl={picture}
-                    tags={tags}
-                    location={location}
-                  />
-                ),
-              )}
-            </>
+          <div className="my-10 flex flex-row flex-wrap gap-5">
+            {fairList?.map(
+              ({
+                event_name: title,
+                description,
+                pictures,
+                tags,
+                city,
+                country,
+                street_addr,
+                id,
+              }) => (
+                <FairCard
+                  color="black"
+                  title={title}
+                  description={description}
+                  pictureUrl={pictures.banner[0].url}
+                  tags={tags}
+                  location={`${street_addr}, ${city}, ${country}`}
+                  id={id}
+                />
+              ),
+            )}
           </div>
         </section>
         <div className="flex justify-center">
           <Pagination
-          // onChange={(value) => {
-          //   setFilterParams({
-          //     ...filterParams,
-          //     page: {
-          //       currentPage: value,
-          //     },
-          //   });
-          // }}
-          // total={undefined}
-          // pageSize={undefined}
+            onChange={(value) => {
+              setFilterParams({
+                ...filterParams,
+                page: {
+                  currentPage: value,
+                },
+              });
+            }}
+            total={pageInfo?.total}
+            pageSize={pageInfo?.pageSize}
           />
         </div>
       </div>

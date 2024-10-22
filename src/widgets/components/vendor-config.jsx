@@ -9,6 +9,7 @@ export function VendorConfig({
   form,
   cities,
   action,
+  orgData
 }) {
   return (
     <div>
@@ -29,7 +30,7 @@ export function VendorConfig({
           ]}
           name="organization_name"
         >
-          <Input placeholder="Johnny Computer" />
+          <Input placeholder="Johnny Computer" defaultValue={orgData?.organization_name}/>
         </Form.Item>
         <div className="flex flex-wrap gap-x-5 align-bottom">
           <Form.Item
@@ -50,6 +51,7 @@ export function VendorConfig({
                 runFetchCities(value);
               }}
               options={orgMetadata?.countries}
+              defaultValue={orgData?.country}
             ></Select>
           </Form.Item>
           <Form.Item
@@ -66,6 +68,7 @@ export function VendorConfig({
               showSearch
               optionFilterProp="label"
               options={cities}
+              defaultValue={orgData?.city}
             />
           </Form.Item>
           <Form.Item
@@ -77,7 +80,7 @@ export function VendorConfig({
             name="contact_address"
             className="w-72 self-end"
           >
-            <Input placeholder="Street address" />
+            <Input placeholder="Street address" defaultValue={orgData?.contact_address}/>
           </Form.Item>
         </div>
         <Form.Item
@@ -90,7 +93,7 @@ export function VendorConfig({
           ]}
           name="contact_phone"
         >
-          <Input placeholder="(+38) 000000000 " />
+          <Input placeholder="(+38) 000000000 " defaultValue={orgData?.contact_phone}/>
         </Form.Item>
         <Form.Item
           required
@@ -102,7 +105,7 @@ export function VendorConfig({
           ]}
           name="email"
         >
-          <Input type="email" placeholder="email@gmail.com " />
+          <Input type="email" placeholder="email@gmail.com " defaultValue={orgData?.email}/>
         </Form.Item>
         <Form.Item label="Type of Business" name="tags">
           <Select
@@ -111,6 +114,7 @@ export function VendorConfig({
             mode="multiple"
             placeholder="Please choose your product categories"
             options={orgMetadata?.tags}
+            defaultValue={orgData?.tags.map( ({value, label})=>value )}
           />
         </Form.Item>
         <div className="flex w-full items-center gap-4">
@@ -125,7 +129,7 @@ export function VendorConfig({
             name="size"
             className="w-full"
           >
-            <Select placeholder="Medium" options={orgMetadata?.company_size} />
+            <Select placeholder="Medium" options={orgMetadata?.company_size} defaultValue={orgData?.size}/>
           </Form.Item>
           <Form.Item
             className="w-full"
@@ -144,6 +148,7 @@ export function VendorConfig({
               max={10}
               placeholder="9"
               changeOnWheel
+              defaultValue={orgData?.years_of_operation}
             />
           </Form.Item>
         </div>
@@ -177,4 +182,5 @@ export function VendorConfig({
 }
 VendorConfig.propTypes = {
   action: PropTypes.oneOf(["UPDATE", "CREATE"]),
+  orgData: PropTypes.object
 };
