@@ -1,6 +1,10 @@
-import { createOrg, getOrgMetadata } from "@/apis";
+import { citiesOfCountries, createOrg, getOrgMetadata } from "@/apis";
 import { validateMessages } from "@/widgets/utils";
-import { useRequest, useSessionStorageState, useLocalStorageState } from "ahooks";
+import {
+  useRequest,
+  useSessionStorageState,
+  useLocalStorageState,
+} from "ahooks";
 import {
   Button,
   Checkbox,
@@ -11,7 +15,7 @@ import {
   Select,
   Typography,
 } from "antd";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Footer } from "react-day-picker";
 
 const { Title } = Typography;
@@ -20,7 +24,12 @@ export function VendorCreate() {
   const [form] = Form.useForm();
   const [orgData, setOrgData] = useSessionStorageState("orgData");
   const [authToken, _] = useLocalStorageState("token");
-  const [orgMetadata, setOrgMetadata] = useState({company_size: [], tags: []});
+  const [orgMetadata, setOrgMetadata] = useState({
+    company_size: [],
+    tags: [],
+    countries: []
+  });
+  const [cities, setCities] = useState([]);
 
   const onFinish = (values) => {
     runCreateOrg(values, authToken);
@@ -37,6 +46,14 @@ export function VendorCreate() {
   useRequest(getOrgMetadata, {
     onSuccess: (result, params) => {
       setOrgMetadata(result);
+    },
+  });
+
+
+  const { run: runFetchCities } = useRequest(citiesOfCountries, {
+    manual: true,
+    onSuccess: (result, params) => {
+      setCities(result.cities);
     },
   });
 
@@ -84,18 +101,55 @@ export function VendorCreate() {
               >
                 <Input placeholder="Johnny Computer" />
               </Form.Item>
-              <Form.Item
-                required
-                label="Contact Address"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-                name="contact_address"
-              >
-                <Input placeholder="Aleksander 1B23 " />
-              </Form.Item>
+              <div className="flex gap-5 align-bottom">
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  label="Contact address"
+                  name="country"
+                  className="w-44"
+                >
+                  <Select
+                    showSearch
+                    optionFilterProp="label"
+                    placeholder="Country"
+                    onSelect={(value) => {
+                      runFetchCities(value);
+                    }}
+                    options={orgMetadata?.countries}
+                  ></Select>
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="city"
+                  className="w-44 self-end"
+                >
+                  <Select
+                    placeholder="City"
+                    showSearch
+                    optionFilterProp="label"
+                    options={cities}
+                  ></Select>
+                </Form.Item>
+                <Form.Item
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  name="contact_address"
+                  className="w-72 self-end"
+                >
+                  <Input placeholder="Street address" />
+                </Form.Item>
+              </div>
               <Form.Item
                 required
                 label="Phone number"

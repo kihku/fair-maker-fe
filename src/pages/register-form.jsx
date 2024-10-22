@@ -159,6 +159,8 @@ export function RegisterForm() {
                   className="w-full"
                 >
                   <Select
+                    showSearch
+                    optionFilterProp="label"
                     placeholder="Finland"
                     onSelect={(value) => {runFetchCities(value)}}
                     options={formMetaData?.countries}
@@ -176,6 +178,8 @@ export function RegisterForm() {
                   name="city"
                 >
                   <Select
+                    showSearch
+                    optionFilterProp="label"
                     placeholder="Liepāja"
                     options={cities}
                   />

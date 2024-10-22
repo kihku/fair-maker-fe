@@ -1,28 +1,33 @@
 import { Footer } from "@/widgets/layout";
 
-import { useRequest, useSessionStorageState, useLocalStorageState } from "ahooks";
+import {
+  useRequest,
+  useSessionStorageState,
+  useLocalStorageState,
+} from "ahooks";
 import React from "react";
-import { Avatar, Button, Tabs, Typography } from "antd";
+import { Avatar, Button, Tabs, Typography, Upload } from "antd";
 import { PersonalInfo } from "@/widgets/components/personal-info";
 import { VendorInfo } from "@/widgets/components/vendor-info";
 import { getUserOrg } from "@/apis";
+import { UploadOutlined } from "@ant-design/icons";
 
 export function Profile() {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
   const [userData, setUserData] = useSessionStorageState("userData");
 
   const [orgData, setOrgData] = useSessionStorageState("orgData");
 
   const [authToken, _] = useLocalStorageState("token");
 
-
   useRequest(getUserOrg, {
-    ready: (authToken && !orgData),
+    ready: authToken && !orgData,
     onSuccess: (result, params) => {
       setOrgData(result);
     },
-    defaultParams: [authToken]
+    defaultParams: [authToken],
   });
-
 
   const TAB_ITEMS = [
     {
@@ -39,7 +44,7 @@ export function Profile() {
       label: "Vendor",
       children: (
         <div className="h-[500px] bg-white dark:bg-stone-900">
-          <VendorInfo orgData={orgData}/>
+          <VendorInfo orgData={orgData} />
         </div>
       ),
     },
@@ -88,6 +93,9 @@ export function Profile() {
                   <Typography className="dark:text-white">
                     In progress Application
                   </Typography>
+                  <Upload action={`${serverUrl}/upload`} headers={{"Authorization": `Bearer ${authToken}`}}>
+                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                  </Upload>
                 </div>
               </div>
 

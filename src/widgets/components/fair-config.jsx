@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { getBase64, validateMessages } from "../utils";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  LoadingOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Checkbox,
@@ -11,12 +15,21 @@ import {
   Space,
   TimePicker,
   Upload,
+  Image,
 } from "antd";
+import { useRequest } from "ahooks";
+import { citiesOfCountries } from "@/apis";
 const { RangePicker } = DatePicker;
 
-export function FairConfig({ onFinish }) {
+export function FairConfig({ onFinish, metadata, authToken }) {
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
+  const [cities, setCities] = useState([]);
+
+  const [mapLoading, setMapLoading] = useState(false);
+  const [bannerLoading, setBannerLoading] = useState(false);
+
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -24,40 +37,59 @@ export function FairConfig({ onFinish }) {
     setPreviewImage(file.url || file.preview);
     setPreviewOpen(true);
   };
-  const [mapFile, setMapFile] = useState([]);
-  const [fileList, setFileList] = useState([
-    {
-      uid: "-1",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-2",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-3",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-    {
-      uid: "-4",
-      name: "image.png",
-      status: "done",
-      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
-    },
-  ]);
-  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
-  const uploadButton = (
+
+  const [mapImg, setMapImg] = useState([]);
+  const [fileList, setFileList] = useState([]);
+  const handleMapChange = (info) => {
+    setMapImg(info.fileList);
+    if (info.fileList[0].status === "uploading") {
+      setMapLoading(true);
+      return;
+    }
+    if (info.fileList[0].status === "done") {
+      // Get this url from response in real world.
+      console.log(info.fileList[0]);
+      setMapLoading(false);
+      setMapImg([
+        {
+          uid: info.fileList[0].uid,
+          status: "done",
+          url: info.fileList[0].response.data.imgUrl,
+          name: info.fileList[0].name,
+        },
+      ]);
+    }
+  };
+
+  const handleMapPreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+  };
+
+  const mapUploadButton = (
     <button className="border-0 bg-none" type="button">
-      <PlusOutlined />
+      {mapLoading ? <LoadingOutlined /> : <PlusOutlined />}
       <div className="mt-[8px]">Upload</div>
     </button>
   );
+
+  const bannerUploadButton = (
+    <button className="border-0 bg-none" type="button">
+      {bannerLoading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div className="mt-[8px]">Upload</div>
+    </button>
+  );
+
+  const { run: runFetchCities } = useRequest(citiesOfCountries, {
+    manual: true,
+    onSuccess: (result, params) => {
+      setCities(result.cities);
+    },
+  });
+
   return (
     <div>
       <Form
@@ -78,7 +110,7 @@ export function FairConfig({ onFinish }) {
             },
           ]}
           label="Name"
-          name="name"
+          name="event_name"
         >
           <Input />
         </Form.Item>
@@ -101,10 +133,18 @@ export function FairConfig({ onFinish }) {
               },
             ]}
             label="Location"
-            name="city"
+            name="country"
             className="w-44"
           >
-            <Select placeholder="City"></Select>
+            <Select
+              showSearch
+              optionFilterProp="label"
+              placeholder="Country"
+              onSelect={(value) => {
+                runFetchCities(value);
+              }}
+              options={metadata?.countries}
+            ></Select>
           </Form.Item>
           <Form.Item
             rules={[
@@ -112,12 +152,40 @@ export function FairConfig({ onFinish }) {
                 required: true,
               },
             ]}
-            name="address"
+            name="city"
+            className="w-44 self-end"
+          >
+            <Select
+              placeholder="City"
+              showSearch
+              optionFilterProp="label"
+              options={cities}
+            ></Select>
+          </Form.Item>
+          <Form.Item
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            name="street_addr"
             className="w-72 self-end"
           >
             <Input placeholder="Address Detail" />
           </Form.Item>
         </div>
+        <Form.Item
+          required
+          label="Phone number"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+          name="phone_contact"
+        >
+          <Input placeholder="(+38) 000000000 " />
+        </Form.Item>
         <Form.Item
           rules={[
             {
@@ -141,7 +209,13 @@ export function FairConfig({ onFinish }) {
           <TimePicker.RangePicker />
         </Form.Item>
         <Form.Item name="tags" label="Event Categories">
-          <Select />
+          <Select
+            showSearch
+            optionFilterProp="label"
+            mode="multiple"
+            placeholder="Please choose your product categories"
+            options={metadata?.tags}
+          />
         </Form.Item>
         <Form.Item
           rules={[
@@ -153,29 +227,32 @@ export function FairConfig({ onFinish }) {
           name="eventMap"
         >
           <Upload
-            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+            action={`${serverUrl}/upload`}
+            headers={{ Authorization: `Bearer ${authToken}` }}
             listType="picture-card"
-            onPreview={handlePreview}
-            onChange={handleChange}
+            fileList={mapImg}
+            onChange={handleMapChange}
+            onPreview={handleMapPreview}
           >
-            {mapFile.length >= 1 ? null : uploadButton}
+            {mapImg.length >= 1 ? null : mapUploadButton}
           </Upload>
         </Form.Item>
-        <Form.Item label="Other resources" name="otherResouces">
+        <Form.Item label="Promotion pictures" name="banner">
           <Upload
-            action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+            action={`${serverUrl}/upload`}
+            headers={{ Authorization: `Bearer ${authToken}` }}
             listType="picture-card"
             fileList={fileList}
             onPreview={handlePreview}
-            onChange={handleChange}
+            onChange={({ fileList }) => setFileList(fileList)}
           >
-            {fileList.length >= 8 ? null : uploadButton}
+            {fileList.length >= 8 ? null : mapUploadButton}
           </Upload>
         </Form.Item>
         <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
-          Vendor Zone Information
+          Booth Zone Information
         </p>
-        <Form.List name="vendorTypes">
+        <Form.List name="boothTypes">
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }) => (
@@ -230,7 +307,7 @@ export function FairConfig({ onFinish }) {
                     <Select
                       placeholder="Enter your Booth Code"
                       mode="tags"
-                    //   tokenSeparators={[","]}
+                      //   tokenSeparators={[","]}
                     />
                   </Form.Item>
                   <MinusCircleOutlined onClick={() => remove(name)} />
