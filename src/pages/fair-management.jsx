@@ -15,7 +15,7 @@ export function FairManagement() {
   useRequest(myOrgEvent, {
     onSuccess: (result, params) => {
       console.log(result);
-      //setUpcomingEvent(upcomingEvent);
+      setUpcomingEvent(result);
     },
     defaultParams: [authToken]
   });
@@ -123,7 +123,7 @@ export function FairManagement() {
             cover={
               <img
                 alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                src={upcomingEvent?.pictures.banner[0].url}
               />
             }
             actions={[
@@ -132,9 +132,8 @@ export function FairManagement() {
             ]}
           >
             <Meta
-              title="Farmer Fair Market"
-              description="Sunday 28/10 11am - 12pm
-            Harbour 66788888"
+              title={upcomingEvent?.event_name}
+              description={upcomingEvent?.description}
             />
           </Card>
         </section>
