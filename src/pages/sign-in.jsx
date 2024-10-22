@@ -1,7 +1,11 @@
 import { Input, Checkbox, Button, Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useSessionStorageState, useRequest, useLocalStorageState } from "ahooks";
+import {
+  useSessionStorageState,
+  useRequest,
+  useLocalStorageState,
+} from "ahooks";
 import React from "react";
 import { sendGoogleLogin } from "@/apis/user";
 
@@ -14,19 +18,18 @@ export function SignIn() {
     manual: true,
     onSuccess: (result, params) => {
       console.log(result);
-      if (!result.has_account){
+      if (!result.has_account) {
         window.open("/register", "_self");
       } else {
         setUserData(result.data);
         setAuthToken(result.token);
         window.open("/profile", "_self");
       }
-      
     },
     onError: (error) => {},
   });
 
-  if (userData){
+  if (userData) {
     window.open("/profile", "_self");
   }
 
@@ -38,8 +41,8 @@ export function SignIn() {
   });
 
   return (
-    <section className="flex h-screen gap-4 p-8 dark:bg-slate-900">
-      <div className="mt-24 w-full lg:w-3/5 ">
+    <section className="flex h-screen gap-4 p-8 dark:bg-stone-900">
+      <div className="mt-24 w-full lg:w-3/5">
         <div className="text-center">
           <Typography variant="h2" className="mb-4 font-bold dark:text-white">
             Sign In
@@ -106,7 +109,6 @@ export function SignIn() {
           />
           <Button
             className="mt-6 dark:bg-white dark:text-slate-900 dark:shadow-slate-900/50"
-            color="green"
             fullWidth
           >
             Sign In
@@ -176,21 +178,12 @@ export function SignIn() {
               <span>Sign in With Google</span>
             </Button>
           </div>
-          <Typography
-            variant="paragraph"
-            className="mt-4 text-center font-medium text-blue-gray-500 dark:text-slate-400"
-          >
-            Not registered?
-            <Link to="/sign-up" className="ml-1 text-gray-900 dark:text-white">
-              Create account
-            </Link>
-          </Typography>
         </form>
       </div>
-      <div className="hidden h-full w-2/5 lg:block">
+      <div className="fixed right-0 top-0 hidden h-screen w-2/5 text-center lg:block">
         <img
-          src="/img/pattern.jpg"
-          className="h-full w-full rounded-3xl object-cover"
+          src="/img/background-3.png"
+          className="h-full w-full object-cover"
         />
       </div>
     </section>

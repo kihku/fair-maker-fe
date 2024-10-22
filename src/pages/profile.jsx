@@ -5,11 +5,11 @@ import {
   useSessionStorageState,
   useLocalStorageState,
 } from "ahooks";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Button, Tabs, Typography, Upload } from "antd";
 import { PersonalInfo } from "@/widgets/components/personal-info";
 import { VendorInfo } from "@/widgets/components/vendor-info";
-import { getUserOrg } from "@/apis";
+import { citiesOfCountries, getOrgMetadata, getUserOrg } from "@/apis";
 import { UploadOutlined } from "@ant-design/icons";
 
 export function Profile() {
@@ -20,6 +20,16 @@ export function Profile() {
   const [orgData, setOrgData] = useSessionStorageState("orgData");
 
   const [authToken, _] = useLocalStorageState("token");
+  const [cities, setCities] = useState([]);
+
+  const { data: orgMetadata } = useRequest(getOrgMetadata);
+
+  const { run: runFetchCities } = useRequest(citiesOfCountries, {
+    manual: true,
+    onSuccess: (result, params) => {
+      setCities(result.cities);
+    },
+  });
 
   useRequest(getUserOrg, {
     ready: authToken && !orgData,
@@ -43,8 +53,13 @@ export function Profile() {
       key: "VENDOR",
       label: "Vendor",
       children: (
-        <div className="h-[500px] bg-white dark:bg-stone-900">
-          <VendorInfo orgData={orgData} />
+        <div className="h-[500px] overflow-y-auto bg-white pr-5 dark:bg-stone-900">
+          <VendorInfo
+            orgData={orgData}
+            cities={cities}
+            runFetchCities={runFetchCities}
+            orgMetadata={orgMetadata}
+          />
         </div>
       ),
     },
@@ -84,24 +99,19 @@ export function Profile() {
                     {userData?.email}
                   </Typography>
                   <hr className="my-3 w-full dark:border-stone-700" />
-                  tags
-                  <hr className="my-3 w-full dark:border-stone-700" />
                   <Typography className="dark:text-white">
-                    Fair Participated
+                    Fair Participated: 0
                   </Typography>
                   <hr className="my-3 w-full dark:border-stone-700" />
                   <Typography className="dark:text-white">
-                    In progress Application
+                    In progress Application: 0
                   </Typography>
-                  <Upload action={`${serverUrl}/upload`} headers={{"Authorization": `Bearer ${authToken}`}}>
-                    <Button icon={<UploadOutlined />}>Click to Upload</Button>
-                  </Upload>
                 </div>
               </div>
 
-              <div className=" relative mb-10 flex grow items-center justify-between border border-gray-200 bg-white dark:border-stone-700 dark:bg-stone-900 lg:mb-0 lg:flex-col lg:px-4">
+              <div className="w-3/4 relative mb-10 flex grow items-center justify-between border border-gray-200 bg-white dark:border-stone-700 dark:bg-stone-900 lg:mb-0 lg:flex-col lg:px-4">
                 <div className="flex w-full">
-                  <div className="mr-4 w-full p-3">
+                  <div className=" w-full">
                     <Tabs defaultActiveKey="1" items={TAB_ITEMS}></Tabs>
                   </div>
                 </div>

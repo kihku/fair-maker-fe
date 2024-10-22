@@ -7,14 +7,14 @@ import {
   useRequest,
 } from "ahooks";
 import React, { useState } from "react";
-import { FairCreate, FairDetail, FairList } from "./pages";
+import { FairCreate, FairDetail, FairList, RegisterForm } from "./pages";
 import { ConfigProvider, theme } from "antd";
 import { getUserInfo } from "@/apis";
 import { VendorCreate } from "./pages/vendor-create";
 
 function App() {
   const { defaultAlgorithm, darkAlgorithm } = theme;
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const { pathname } = useLocation();
 
   const [userData, setUserData] = useSessionStorageState("userData");
@@ -32,13 +32,14 @@ function App() {
   });
 
   const local_routes = userData
-    ? routes.filter((route) => !["/sign-in", "/sign-up"].includes(route.path))
+    ? routes.filter((route) => !["/sign-in"].includes(route.path))
     : routes;
   return (
     <>
-      {!(pathname == "/sign-in" || pathname == "/sign-up") && (
+      {!(pathname == "/sign-in" || pathname == "/register") && (
         <div className="container absolute left-2/4 z-10 mx-auto -translate-x-2/4 p-4">
           <Navbar
+            isDarkMode={isDarkMode}
             onDarkModeChange={() => setIsDarkMode(!isDarkMode)}
             routes={local_routes}
           />
@@ -68,8 +69,9 @@ function App() {
           <Route
             path="/fair-create"
             key="fairCreate"
-            element={<FairCreate />}
+            element={<RegisterForm />}
           />
+          <Route path="/register" key="register" element={<FairCreate />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </ConfigProvider>

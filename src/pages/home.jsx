@@ -44,7 +44,7 @@ export function Home() {
             ))}
           </Carousel>
         </div>
-        <div className="absolute top-0 h-full w-full bg-black/40 bg-cover bg-center dark:bg-slate-900/40" />
+        <div className="absolute top-0 h-full w-full bg-black/40 bg-cover bg-center dark:bg-stone-900/40" />
         <div className="max-w-8xl container relative mx-auto">
           <div className="flex flex-wrap items-center">
             <div className="ml-auto mr-auto w-full px-4 text-center lg:w-8/12">
@@ -66,7 +66,7 @@ export function Home() {
           </div>
         </div>
       </div>
-      <section className="-mt-32 bg-white px-4 pb-20 pt-4 dark:bg-slate-900">
+      <section className="-mt-32 bg-white px-4 pb-20 pt-4 dark:bg-stone-900">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuresData.map(({ color, title, icon, description }) => (
@@ -75,7 +75,7 @@ export function Home() {
                 color={color}
                 title={title}
                 icon={React.createElement(icon, {
-                  className: "w-5 h-5 text-white dark:text-slate-800",
+                  className: "w-5 h-5 text-white dark:text-stone-800",
                 })}
                 description={description}
               />
@@ -90,7 +90,7 @@ export function Home() {
               >
                 Why Choose BazaarHub?
               </Typography>
-              <Typography className="mb-8 font-normal text-blue-gray-500 dark:text-slate-400">
+              <Typography className="mb-8 font-normal text-blue-gray-500 dark:text-stone-400">
                 BazaarHub simplifies every aspect of market fair management into
                 one efficient platform. Organizers can easily manage
                 registrations, allocate booths, and monitor event performance in
@@ -100,17 +100,7 @@ export function Home() {
                 event discovery, browsing vendor offerings, and planning their
                 visits with ease.
                 <br />
-                <br />
-                Join BazaarHub today for a seamless, streamlined experience that
-                makes managing or attending market fairs smarter and more
-                efficient for everyone involved.
               </Typography>
-              <Button
-                className="dark:bg-white dark:text-slate-900"
-                variant="filled"
-              >
-                read more
-              </Button>
             </div>
             <div className="mx-auto mt-16 flex w-full justify-center px-4 md:w-4/12 lg:mt-0">
               <div className="hidden h-full w-full lg:block">
@@ -123,12 +113,12 @@ export function Home() {
           </div>
         </div>
       </section>
-      <section className="relative bg-white px-4 py-24 dark:bg-slate-900">
+      <section className="relative bg-white px-4 py-24 dark:bg-stone-900">
         <div className="container mx-auto">
           <PageTitle heading="How to become a vendor">
             <Typography
               variant="normal"
-              className="font-normal dark:text-slate-400"
+              className="font-normal dark:text-stone-400"
             >
               To apply as a vendor, start by completing the online application,
               where you'll need to provide photos of your products and booth
@@ -141,10 +131,10 @@ export function Home() {
           <div className="mt-5 flex flex-row flex-wrap justify-center gap-3">
             <Button color="amber">Upcoming fairs</Button>
             <Button color="amber">More information</Button>
-            <Button className="dark:bg-white dark:text-slate-800">FAQ</Button>
+            <Button className="dark:bg-white dark:text-stone-800">FAQ</Button>
           </div>
 
-          <hr className="mt-24 dark:border-slate-600" />
+          <hr className="mt-24 dark:border-stone-600" />
           <div className="mt-24 ">
             <PageTitle section="Contact Us" heading="Want to work with us?">
               Complete this form and we will get back to you in 24 hours.
@@ -169,17 +159,17 @@ export function Home() {
                 />
               </div>
               <Checkbox
-                className="dark:bg-slate-700"
+                className="dark:bg-stone-700"
                 label={
                   <Typography
                     variant="small"
                     color="gray"
-                    className="flex items-center font-normal dark:text-slate-400"
+                    className="flex items-center font-normal dark:text-stone-400"
                   >
                     I agree the
                     <a
                       href="#"
-                      className="font-medium transition-colors hover:text-gray-900 dark:text-slate-400 dark:hover:text-white"
+                      className="font-medium transition-colors hover:text-gray-900 dark:text-stone-400 dark:hover:text-white"
                     >
                       &nbsp;Terms and Conditions
                     </a>

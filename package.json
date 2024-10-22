@@ -17,6 +17,8 @@
     "@nanostores/react": "^0.8.0",
     "@react-oauth/google": "^0.12.1",
     "@splinetool/react-spline": "^4.0.0",
+    "@stripe/react-stripe-js": "^2.8.1",
+    "@stripe/stripe-js": "^4.8.0",
     "ahooks": "^3.8.1",
     "antd": "^5.21.4",
     "apexcharts": "^3.53.0",
@@ -31,6 +33,8 @@
     "react-hook-form": "^7.53.0",
     "react-icons": "^5.3.0",
     "react-router-dom": "6.17.0",
+    "react-toggle-dark-mode": "^1.1.1",
+    "stripe": "^17.2.1",
     "structured-clone": "^0.2.2"
   },
   "devDependencies": {

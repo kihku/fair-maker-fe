@@ -20,7 +20,7 @@ export function FairCard({
   location,
 }) {
   return (
-    <Card className="w-full max-w-[28rem] shadow-lg dark:bg-slate-800">
+    <Card className="w-full max-w-[28rem] shadow-lg dark:bg-stone-800">
       <CardHeader
         floated={false}
         className="dark:shadow-none"
@@ -67,14 +67,14 @@ export function FairCard({
         <div className="group mt-8 inline-flex flex-wrap items-center gap-2">
           {tags?.slice(0, 3).map(({ color, name }) => (
             <div
-              className={`rounded-full bg-gray-100 px-5 text-black dark:bg-slate-900 dark:text-white`}
+              className={`rounded-full bg-gray-100 px-5 text-black dark:bg-black dark:text-white`}
             >
               {name}
             </div>
           ))}
           {tags?.length > 3 && (
             <Tooltip content={`And +${tags.length - 3} more`}>
-              <span className="cursor-pointer rounded-full border border-gray-900/5 bg-gray-900/5 px-3 text-gray-900 transition-colors hover:border-gray-900/10 hover:bg-gray-900/10 hover:!opacity-100 group-hover:opacity-70 dark:bg-slate-900 dark:text-white">
+              <span className="cursor-pointer rounded-full border border-gray-900/5 bg-gray-900/5 px-3 text-gray-900 transition-colors hover:border-gray-900/10 hover:bg-gray-900/10 hover:!opacity-100 group-hover:opacity-70 dark:bg-black dark:text-white">
                 {`+${tags.length - 3}`}
               </span>
             </Tooltip>
@@ -83,6 +83,7 @@ export function FairCard({
       </CardBody>
       <CardFooter className="pt-3">
         <Button
+          className="bg-black"
           size="lg"
           fullWidth={true}
           onClick={() => window.open("/fair-detail")}

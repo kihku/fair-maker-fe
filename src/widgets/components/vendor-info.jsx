@@ -1,11 +1,13 @@
-import { Button, Typography } from "antd";
+import { Button, Form, Typography } from "antd";
 import React, { useState } from "react";
-import { useSessionStorageState, useRequest, useLocalStorageState } from "ahooks";
 import { getUserOrg } from "@/apis";
+import { VendorConfig } from "./vendor-config";
 
-export function VendorInfo({orgData}) {
-  const [modalOpen, setModalOpen] = useState(false);
-
+export function VendorInfo({ orgData, cities, runFetchCities, orgMetadata }) {
+  const [form] = Form.useForm();
+  const onFinish = (values) => {
+    // runCreateOrg(values, authToken);
+  };
   return (
     <>
       {!orgData ? (
@@ -25,9 +27,16 @@ export function VendorInfo({orgData}) {
           />
         </div>
       ) : (
-        <Typography.Title>
-          Company name: {orgData?.organization_name}
-        </Typography.Title>
+        <div>
+          <VendorConfig
+            onFinish={onFinish}
+            runFetchCities={runFetchCities}
+            orgMetadata={orgMetadata}
+            form={form}
+            cities={cities}
+            action="UPDATE"
+          />
+        </div>
       )}
     </>
   );

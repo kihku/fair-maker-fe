@@ -9,7 +9,7 @@ import React from "react";
 
 export function FeatureCard({ color, icon, title, description }) {
   return (
-    <Card className="rounded-lg shadow-lg shadow-gray-500/10 dark:bg-slate-800 dark:shadow-slate-900/50">
+    <Card className="rounded-lg shadow-lg shadow-gray-500/10 dark:bg-stone-800 dark:shadow-slate-900/50">
       <CardBody className="px-8 text-center">
         {icon && (
           <IconButton
@@ -24,7 +24,7 @@ export function FeatureCard({ color, icon, title, description }) {
         <Typography variant="h5" className="mb-2 dark:text-white" color="blue-gray">
           {title}
         </Typography>
-        <Typography className="font-normal text-blue-gray-600 dark:text-slate-400">
+        <Typography className="font-normal text-blue-gray-600 dark:text-stone-400">
           {description}
         </Typography>
       </CardBody>

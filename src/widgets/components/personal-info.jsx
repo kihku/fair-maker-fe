@@ -134,9 +134,9 @@ export function PersonalInfo() {
           />
         </Form.Item>
       </div>
-      <div className="flex">
+      {/* <div className="flex">
         <Button>Save</Button>
-      </div>
+      </div> */}
     </Form>
   );
 }

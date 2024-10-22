@@ -16,8 +16,16 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { useLocalStorageState } from "ahooks";
+import { Switch } from "antd";
+import { DarkModeSwitch } from "react-toggle-dark-mode";
 
-export function Navbar({ brandName, routes, action, onDarkModeChange }) {
+export function Navbar({
+  brandName,
+  routes,
+  action,
+  isDarkMode,
+  onDarkModeChange,
+}) {
   const [openNav, setOpenNav] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
@@ -83,16 +91,16 @@ export function Navbar({ brandName, routes, action, onDarkModeChange }) {
         </Link>
         <div className="hidden lg:block">{navList}</div>
         <div className="hidden gap-2 lg:flex">
-          <Button
-            size="sm"
-            onClick={() => {
+          <DarkModeSwitch
+            className="mr-5 mt-[10px]"
+            sunColor="white"
+            onChange={() => {
               document.documentElement.classList.toggle("dark");
               onDarkModeChange();
             }}
-            className="hidden lg:inline-block"
-          >
-            Toggle Dark mode
-          </Button>
+            size={30}
+            checked={isDarkMode}
+          />
           {React.cloneElement(action, {
             className: "hidden lg:inline-block",
             onClick: () => handleOpen(true),
@@ -136,6 +144,7 @@ Navbar.defaultProps = {
         color="amber"
         size="sm"
         fullWidth
+        className="mt-[10px]"
         onClick={() => window.open("/fair-list")}
       >
         Upcoming fairs

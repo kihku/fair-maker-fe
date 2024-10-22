@@ -1,4 +1,4 @@
-import { FairList, Home, Profile, SignIn, SignUp } from "@/pages";
+import { FairList, Home, Profile, SignIn } from "@/pages";
 import React from "react";
 import { RegisterForm } from "./pages/register-form";
 import { FairManagement } from "./pages/fair-management";
@@ -20,19 +20,9 @@ export const routes = [
     element: <SignIn />,
   },
   {
-    name: "Sign Up",
-    path: "/sign-up",
-    element: <SignUp />,
-  },
-  {
     name: "About",
     path: "/home",
     element: <Home />,
-  },
-  {
-    name: "Register form",
-    path: "/register",
-    element: <RegisterForm />,
   },
   {
     name: "Fair Management",
