@@ -18,6 +18,7 @@ export function FairCard({
   pictureUrl,
   tags,
   location,
+  id
 }) {
   return (
     <Card className="w-full max-w-[28rem] shadow-lg dark:bg-stone-800">
@@ -27,7 +28,7 @@ export function FairCard({
         color="blue-gray"
       >
         <img
-          src="https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
+          src={pictureUrl}
           alt="ui/ux review check"
         />
         <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60 " />
@@ -65,11 +66,11 @@ export function FairCard({
           {location}
         </p>
         <div className="group mt-8 inline-flex flex-wrap items-center gap-2">
-          {tags?.slice(0, 3).map(({ color, name }) => (
+          {tags?.slice(0, 3).map(({ value, label }) => (
             <div
               className={`rounded-full bg-gray-100 px-5 text-black dark:bg-black dark:text-white`}
             >
-              {name}
+              {label}
             </div>
           ))}
           {tags?.length > 3 && (
@@ -86,7 +87,7 @@ export function FairCard({
           className="bg-black"
           size="lg"
           fullWidth={true}
-          onClick={() => window.open("/fair-detail")}
+          onClick={() => window.open(`/fair-detail/${id}`)}
         >
           More info
         </Button>

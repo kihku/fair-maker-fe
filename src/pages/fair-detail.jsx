@@ -1,9 +1,34 @@
+import { getFairDetail } from "@/apis";
 import { Footer } from "@/widgets/layout";
 import { FacebookFilled, InstagramFilled } from "@ant-design/icons";
+import { useLocalStorageState, useRequest } from "ahooks";
 import { Button, Carousel, Typography } from "antd";
-import React from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 
 export function FairDetail() {
+  let { eventId } = useParams();
+
+  const [authToken, _] = useLocalStorageState("token");
+  const [fairDetail, setFairDetail] = useState();
+
+  const datePrintOptions = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+
+  useRequest(getFairDetail, {
+    onSuccess: (result, params) => {
+      console.log(result);
+      setFairDetail(result);
+    },
+    defaultParams: [eventId, authToken],
+  });
+
+  console.log(eventId);
+
   const CAROUSEL_IMAGES = [
     "pic_1.jpg",
     "pic_2.jpg",
@@ -15,9 +40,9 @@ export function FairDetail() {
     <div className="bg-white dark:bg-stone-900">
       <div className="h-24 bg-black"></div>
       <Carousel autoplay className="relative h-fit lg:h-96">
-        {CAROUSEL_IMAGES.map((picName) => (
+        {fairDetail?.pictures.banner.map(({ url }) => (
           <img
-            src={`/img/homepage_carousel/${picName}`}
+            src={url}
             alt="image 1"
             className="h-[600px] w-full object-cover blur-[1px] lg:h-96"
           />
@@ -27,14 +52,32 @@ export function FairDetail() {
       <div className="absolute top-28 flex w-full  flex-wrap items-center justify-between gap-12 p-10 lg:px-52">
         <div>
           <p className="mb-4 text-5xl font-bold text-white">
-            Farmers Market Fest
+            {fairDetail?.event_name}
           </p>
-          <p className="mb-6 text-lg  font-bold text-white">By Apple Corp</p>
+          <p className="mb-6 text-lg  font-bold text-white">
+            By {fairDetail?.organizer}
+          </p>
           <Typography className="text-white">
-            123 Main Street, Event Plaza, Latvia
+            {`${fairDetail?.street_addr}, ${fairDetail?.city}, ${fairDetail?.country}`}
           </Typography>
           <Typography className="text-white">
-            October 20-22, 2024 | 9:00 AM – 6:00 PM
+            {`${new Date(fairDetail?.start_date).toLocaleDateString(
+              undefined,
+              datePrintOptions,
+            )} - ${new Date(fairDetail?.end_date).toLocaleDateString(
+              undefined,
+              datePrintOptions,
+            )} | 
+            
+            ${new Date(
+              fairDetail?.details.config.operation_hours[0],
+            ).toLocaleTimeString("de-DE")}
+            -
+            ${new Date(
+              fairDetail?.details.config.operation_hours[1],
+            ).toLocaleTimeString("de-DE")}
+            
+            `}
           </Typography>
         </div>
         <div className="flex h-fit w-fit flex-col gap-3 rounded-lg bg-white px-10 py-5 dark:bg-stone-900 md:px-20">
@@ -61,28 +104,19 @@ export function FairDetail() {
       <div className="flex flex-wrap gap-32 px-5 py-20 lg:flex-nowrap lg:px-52">
         <div>
           <p className="mb-4 text-3xl font-bold dark:text-white">Description</p>
-          <Typography.Paragraph>
-            Contrary to popular belief, Lorem Ipsum is not simply random text.
-            It has roots in a piece of classical Latin literature from 45 BC,
-            making it over 2000 years old. Richard McClintock, a Latin professor
-            at Hampden-Sydney College in Virginia, looked up one of the more
-            obscure Latin words, consectetur, from a Lorem Ipsum passage, and
-            going through the cites of the word in classical literature,
-            discovered the undoubtable source. Lorem Ipsum comes from sections
-            1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-            of Good and Evil) by Cicero, written in 45 BC. This book is a
-            treatise on the theory of ethics, very popular during the
-            Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit
-            amet..", comes from a line in section 1.10.32. The standard chunk of
-            Lorem Ipsum used since the 1500s is reproduced below for those
-            interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et
-            Malorum" by Cicero are also reproduced in their exact original form,
-            accompanied by English versions from the 1914 translation by H.
-            Rackham.
-          </Typography.Paragraph>
+          <Typography.Paragraph>{fairDetail?.description}</Typography.Paragraph>
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">Hours</p>
           <Typography>
-            <span className="font-bold">Weekday hour:</span> 11am - 6pm
+            <span className="font-bold">Hour:</span>
+            {`
+            ${new Date(
+              fairDetail?.details.config.operation_hours[0],
+            ).toLocaleTimeString("de-DE")}
+            -
+            ${new Date(
+              fairDetail?.details.config.operation_hours[1],
+            ).toLocaleTimeString("de-DE")}
+              `}
           </Typography>
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
             Organizer Information
@@ -110,20 +144,23 @@ export function FairDetail() {
         <div>
           <p className="mb-4 text-3xl font-bold dark:text-white">Event Map</p>
           <div className="mb-5 overflow-hidden rounded-3xl lg:w-96">
-            <img src="/img/fair-map.jpeg"></img>
+            <img src={fairDetail?.pictures.map.url}></img>
           </div>
-          <Typography.Paragraph>
+          {/* <Typography.Paragraph>
             Contrary to popular belief, Lorem Ipsum is not simply random text.
             It has roots in a piece of classical Latin literature from 45 BC,
             making it over 2000 years old. Richard McClintock, a Latin professor
             at Hampden-Sydney College in Virginia, looked up one of the more
             obscure Latin words, consectetur, from a Lorem Ipsum passage, and
             going through the cites of the
-          </Typography.Paragraph>
+          </Typography.Paragraph> */}
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">Tags</p>
-          <div className="w-fit rounded-xl bg-gray-200 px-5 py-1 text-center text-sm font-bold dark:bg-stone-700 dark:text-white">
-            Tag 1
-          </div>
+          {fairDetail?.tags.map(({ value, label }) => (
+            <div className="w-fit rounded-xl bg-gray-200 px-5 py-1 text-center text-sm font-bold dark:bg-stone-700 dark:text-white">
+              {label}
+            </div>
+          ))}
+
           <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
             Share with friends
           </p>
@@ -139,9 +176,9 @@ export function FairDetail() {
         </p>
         <div className="overflow-hidden rounded-3xl">
           <Carousel arrows>
-            {CAROUSEL_IMAGES.map((picName) => (
+            {fairDetail?.pictures.banner.map(({ url }) => (
               <img
-                src={`/img/homepage_carousel/${picName}`}
+                src={url}
                 alt="image 1"
                 className="h-[400px] w-full object-cover blur-[1px] lg:h-96"
               />

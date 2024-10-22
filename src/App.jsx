@@ -62,7 +62,7 @@ function App() {
             element={<VendorCreate />}
           />
           <Route
-            path="/fair-detail"
+            path="/fair-detail/:eventId"
             key="fairDetail"
             element={<FairDetail />}
           />
