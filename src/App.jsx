@@ -69,9 +69,8 @@ function App() {
           <Route
             path="/fair-create"
             key="fairCreate"
-            element={<RegisterForm />}
+            element={<FairCreate />}
           />
-          <Route path="/register" key="register" element={<FairCreate />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </ConfigProvider>
