@@ -13,13 +13,11 @@ import { citiesOfCountries, getOrgMetadata, getUserOrg } from "@/apis";
 import { UploadOutlined } from "@ant-design/icons";
 
 export function Profile() {
-  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  const [userData, setUserData] = useSessionStorageState("userData", { listenStorageChange: true});
 
-  const [userData, setUserData] = useSessionStorageState("userData");
+  const [orgData, setOrgData] = useSessionStorageState("orgData", { listenStorageChange: true});
 
-  const [orgData, setOrgData] = useSessionStorageState("orgData");
-
-  const [authToken, _] = useLocalStorageState("token");
+  const [authToken, _] = useLocalStorageState("token", { listenStorageChange: true});
   const [cities, setCities] = useState([]);
 
   const { data: orgMetadata } = useRequest(getOrgMetadata);
@@ -35,6 +33,7 @@ export function Profile() {
     ready: authToken && !orgData,
     onSuccess: (result, params) => {
       setOrgData(result);
+      runFetchCities(result?.country);
     },
     defaultParams: [authToken],
   });
@@ -45,7 +44,7 @@ export function Profile() {
       label: "Personal Information",
       children: (
         <div className="h-[500px] bg-white dark:bg-stone-900">
-          <PersonalInfo />
+          {userData && <PersonalInfo userData={userData}/>}
         </div>
       ),
     },
