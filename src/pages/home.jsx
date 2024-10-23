@@ -20,12 +20,7 @@ export function Home() {
   const ref2 = useRef();
   const isVisible2 = useIsVisible(ref2);
 
-  const CAROUSEL_IMAGES = [
-    "pic_1.jpg",
-    "pic_3.jpg",
-    "pic_4.jpg",
-    "pic_5.jpg",
-  ];
+  const CAROUSEL_IMAGES = ["pic_1.jpg", "pic_3.jpg", "pic_4.jpg", "pic_5.jpg"];
   const getItems = (panelStyle) => [
     {
       key: "1",
@@ -148,13 +143,18 @@ export function Home() {
               >
                 The Future of Seamless Market Fair Management
               </Typography>
-              <Typography variant="lead" color="white" className="opacity-80">
+              <Typography
+                variant="lead"
+                color="white"
+                className="font-bold opacity-80"
+              >
                 At BazaarHub, we believe in making market fairs effortless for
                 organizers, vendors, and customers alike. Whether you’re
                 organizing a large-scale event or running a local pop-up, our
                 platform is designed to simplify the process every step of the
                 way.
               </Typography>
+              <Button></Button>
             </div>
           </div>
         </div>
