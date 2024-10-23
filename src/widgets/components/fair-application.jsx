@@ -106,6 +106,7 @@ export function FairApplication({
         <p className="mb-4 mt-10 text-2xl font-bold dark:text-white">
           Required utilities
         </p>
+
         <Checkbox
           indeterminate={indeterminate}
           onChange={onCheckAllChange}
@@ -114,11 +115,15 @@ export function FairApplication({
           Check all
         </Checkbox>
         <hr className="my-2 w-[300px]" />
-        <Checkbox.Group
-          options={utilityOptions}
-          value={checkedList}
-          onChange={onChange}
-        />
+        <Form.Item
+          name="utilities"
+        >
+          <Checkbox.Group
+            options={utilityOptions}
+            value={checkedList}
+            onChange={onChange}
+          />
+        </Form.Item>
 
         <p className="mb-4 mt-10 text-3xl font-bold dark:text-white">
           Documents

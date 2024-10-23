@@ -1,9 +1,9 @@
-import { citiesOfCountries, getListFair, getOrgMetadata } from "@/apis";
+import { citiesOfCountries, getListFair, getOrgMetadata, getUserOrg, orgApplication } from "@/apis";
 import { FAIR_LIST } from "@/data";
 import { PaymentForm } from "@/widgets/components";
 import { FairCard } from "@/widgets/components/fair-card";
 import { Footer } from "@/widgets/layout";
-import { validateMessages } from "@/widgets/utils";
+import { STATUS_TO_TEXT, validateMessages } from "@/widgets/utils";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import {
@@ -18,17 +18,27 @@ import {
   Tag,
   Timeline,
 } from "antd";
-import { useLocalStorageState, useRequest, useUpdateEffect } from "ahooks";
+import { useLocalStorageState, useRequest, useSessionStorageState, useUpdateEffect } from "ahooks";
 import React, { useEffect, useState } from "react";
 
 export function FairList() {
   const stripePromise = loadStripe("your_public_stripe_key_here");
+  const [orgData, setOrgData] = useSessionStorageState("orgData", { listenStorageChange: true });
+
   const [open, setOpen] = useState(false);
   const showModal = () => {
     setOpen(true);
   };
   const [form] = Form.useForm();
   const [authToken, _] = useLocalStorageState("token");
+  useRequest(getUserOrg, {
+    ready: authToken && !orgData,
+    onSuccess: (result, params) => {
+      setOrgData(result);
+      runFetchCities(result?.country);
+    },
+    defaultParams: [authToken],
+  });
   const [filterParams, setFilterParams] = useState({
     city: undefined,
     country: undefined,
@@ -68,6 +78,14 @@ export function FairList() {
     },
   });
   const [fairList, setFairList] = useState([]);
+
+  const { data: applications } = useRequest(orgApplication, {
+    ready: (orgData && authToken),
+    defaultParams: [orgData?.id, authToken]
+  })
+
+  const [selectedStatus, setSelectedStatus] = useState("IN_PROGRESS");
+
   return (
     <>
       <Modal
@@ -88,22 +106,22 @@ export function FairList() {
             items={[
               {
                 label: "2015-09-01",
-                children: "Create Application",
+                children: "Application Received",
               },
               {
                 label: "2015-09-01 09:12:11",
-                children: "Solve initial network problems",
+                children: "Application Approved",
               },
               {
-                children: "Technical testing",
+                children: "Booth Assigned, Payment Requested",
               },
               {
                 label: "2015-09-01 09:12:11",
-                children: "Network problems being solved",
+                children: "Payment received, ",
               },
             ]}
           />
-          {true && (
+          {(selectedStatus == "FINALIZED") && (
             <>
               <p className="mb-4 mt-10 text-base font-bold dark:text-white">
                 Entrance QR Code
@@ -112,7 +130,7 @@ export function FairList() {
               <QRCode value={"-"} />
             </>
           )}
-          {true && (
+          {(selectedStatus == "APPROVE") && (
             <>
               <p className="mb-1 mt-10 text-base font-bold dark:text-white">
                 Payment
@@ -135,16 +153,19 @@ export function FairList() {
               Your applications
             </p>
             <div className="flex w-full flex-wrap gap-5">
-              {[1, 2, 3, 4].map((card) => (
-                <Card
-                  onClick={showModal}
-                  className="w-full	 hover:cursor-pointer lg:w-1/4"
-                  title="Farmer market"
-                  extra={<Tag color="blue">PENDING</Tag>}
-                >
-                  <p>Your application is being processed by the organizer</p>
-                </Card>
-              ))}
+
+              {applications && (
+                applications.map(({ event_name, status }) => (
+                  <Card
+                    onClick={() => {showModal(); setSelectedStatus(status); console.log(selectedStatus)}}
+                    className="w-full	 hover:cursor-pointer lg:w-1/2"
+                    title={event_name}
+                    extra={<Tag color={STATUS_TO_TEXT[status][0]}>{STATUS_TO_TEXT[status][1]}</Tag>}
+                  >
+                    <p>Your application is being processed by the organizer</p>
+                  </Card>
+                ))
+              )}
             </div>
           </section>
         )}

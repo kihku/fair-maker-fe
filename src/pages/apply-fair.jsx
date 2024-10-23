@@ -1,4 +1,4 @@
-import { createFair, getFairDetail, getOrgMetadata } from "@/apis";
+import { applyFair, createFair, getFairDetail, getOrgMetadata } from "@/apis";
 import { FairConfig, showNotice } from "@/widgets/components";
 import { FairApplication } from "@/widgets/components/fair-application";
 import { Footer } from "@/widgets/layout";
@@ -19,7 +19,7 @@ export function FairApply() {
     defaultParams: [eventId, authToken],
   });
 
-  const { run: runSubmit } = useRequest(createFair, {
+  const { run: runSubmit } = useRequest(applyFair, {
     manual: true,
     onSuccess: (result, params) => {
       console.log(result);
@@ -28,9 +28,19 @@ export function FairApply() {
   });
 
   const onFinish = (values) => {
-    
+
+    const new_document = []
+    Object.keys(values.documents).forEach((key, index) =>{
+      new_document.push({
+        document_name: key,
+        file_name: values.documents[key]["next-entry"].file.name
+      })
+    })
+
+    values.documents = new_document;
+    // values.utilities = 
     console.log(JSON.stringify(values));
-    //runSubmit(payload, authToken);
+    runSubmit(eventId, values, authToken);
   };
 
   const [orgMetadata, setOrgMetadata] = useState({

@@ -42,3 +42,13 @@ export async function getOrganizationData(org_id, token){
   });
   return data?.data;
 }
+
+
+export async function orgApplication(org_id, token) {
+  let data = await send_request({
+    method: "GET",
+    url: `/org/${org_id}/application`,
+    token: token
+  });
+  return data?.data;
+}

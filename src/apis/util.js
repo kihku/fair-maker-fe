@@ -1,7 +1,6 @@
 const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 function objToParamString(params){
-    console.log(params);
     let result = "";
     for (const [key, value] of Object.entries(params)){
         if (value){

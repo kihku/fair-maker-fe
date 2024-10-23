@@ -12,6 +12,7 @@ export function FairCreate() {
     onSuccess: (result, params) => {
       console.log(result);
       showNotice("success");
+      window.open("/fair-management","_self");
     }
   })
 

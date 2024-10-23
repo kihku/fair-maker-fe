@@ -47,3 +47,43 @@ export async function getFairDetail(eventId, token){
   });
   return data?.data;
 }
+
+export async function applyFair(eventId, payload, token){
+  let data = await send_request({
+    method: "POST",
+    url: `/event/${eventId}/apply`,
+    body: {
+      data: {
+        application_data: payload
+      }
+    },
+    token
+  });
+  return data?.data;
+}
+
+export async function fairApplications(eventId, token){
+  let data = await send_request({
+    method: "GET",
+    url: `/event/${eventId}/application`,
+    token
+  });
+  return data?.data;
+}
+
+export async function updateApplicationStatus(eventId, applicationId, status, token){
+  if (!eventId){
+    return undefined;
+  }
+  let data = await send_request({
+    method: "POST",
+    url: `/event/${eventId}/application/${applicationId}`,
+    body: {
+      data: {
+        status
+      }
+    },
+    token
+  });
+  return data?.data;
+}
